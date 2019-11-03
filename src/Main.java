@@ -1,9 +1,10 @@
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 /**
  * This contains the main function to trigger the project.
  */
-public class Main {
+public class Main implements TransactionMessage{
     public static void main(String[] args) {
         Bank bank = Bank.getInstance();
 
@@ -19,5 +20,18 @@ public class Main {
         rates.setRate("USD", "RMB", 5);
         rates.setRate("USD", "CCC", 8);
         System.out.println(rates.getRate("USD", "RMB"));
+        
+        tf.addWindowListener(new   java.awt.event.WindowAdapter()   { 
+        	public   void   windowClosing(java.awt.event.WindowEvent   e)   { 
+        		 try {
+        				TransactionMessage.writeFile();
+        			} catch (IOException e2) {
+        				// TODO Auto-generated catch block
+        				e2.printStackTrace();
+        			}
+        	} 
+        	});
+        
+       
     }
 }
