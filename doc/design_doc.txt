@@ -1,0 +1,6 @@
+Dezhou Wang
+U46937632
+
+all classes with names starting with "Bank" are only used for Bank project
+all classes with names starting with "GUI" are only used for GUI
+other classes can be generally used.
