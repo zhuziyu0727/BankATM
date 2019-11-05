@@ -11,6 +11,7 @@ public class Main implements TransactionMessage{
        bank.setManager("admin", "Admin000", "admin@gmail.com");
 
        bank.registerNewCustomer("dezhouw", "Aa123456", "dezhouw@sina.com");
+       bank.registerNewCustomer("test1", "Aa123456", "test@sina.com");
 
 
         GUIBankATMFrame tf = new GUIBankATMFrame();
@@ -21,16 +22,16 @@ public class Main implements TransactionMessage{
         rates.setRate("USD", "CCC", 8);
         System.out.println(rates.getRate("USD", "RMB"));
         
-        tf.addWindowListener(new   java.awt.event.WindowAdapter()   { 
-        	public   void   windowClosing(java.awt.event.WindowEvent   e)   { 
-        		 try {
-        				TransactionMessage.writeFile();
-        			} catch (IOException e2) {
-        				// TODO Auto-generated catch block
-        				e2.printStackTrace();
-        			}
-        	} 
-        	});
+//        tf.addWindowListener(new   java.awt.event.WindowAdapter()   { 
+//        	public   void   windowClosing(java.awt.event.WindowEvent   e)   { 
+//        		 try {
+//        				TransactionMessage.writeFile();
+//        			} catch (IOException e2) {
+//        				// TODO Auto-generated catch block
+//        				e2.printStackTrace();
+//        			}
+//        	} 
+//        	});
         
        
     }

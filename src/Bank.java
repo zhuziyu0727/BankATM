@@ -83,7 +83,7 @@ public class Bank implements BankAccountTypes {
     public String getCountryByCustomer(BankCustomer customer) {
         return customer.getAddressCountry();
     }
-
+    
     public ArrayList<String> getAllAccountNumbersByCustomer(BankCustomer customer) {
         return customer.getAllAccountNumbers();
     }
@@ -120,7 +120,7 @@ public class Bank implements BankAccountTypes {
                                                                                      String accountNumber) {
         return customer.getTransactionHistoryByAccountNumber(accountNumber);
     }
-
+        
     // primary functions
     public void increaseSaving(int day, int month, int year) {
         for (BankCustomer customer: customers) {
@@ -263,7 +263,22 @@ public class Bank implements BankAccountTypes {
         double value2 = exchangeRate.calculate(value, toAbbr, abbr2);
         customer2.transferIntoAccount(toAccountNumber, value2, day, month, year, fromAccountNumber);
     }
-
+    //Manager functions
+    public String getCustomerUsernames() {
+		String res="";
+		for(BankCustomer customer: customers) {
+			res += customer.getUsername()+"\n";
+		}
+        return res;
+    }
+    
+    public boolean hasCustomerByUsername(String username) {
+        for (BankCustomer b: customers) {
+            if (username.equals(b.getUsername()))
+                return true;
+        }
+        return false;
+    }
     // Customer functions
     public void setCustomerPassword(BankCustomer customer, String password) {
         if (!password.equals(customer.getPassword()))
