@@ -13,6 +13,10 @@ public class BankTransactionsHistory {
     }
 
     // accessor function
+    public ArrayList<BankTransaction> getHistory(){
+    	return history;
+    }
+    
     public String[][] getData() {
         String[][] data = new String[history.size()][5];
         int count = 0;

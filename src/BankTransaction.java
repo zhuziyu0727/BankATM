@@ -23,6 +23,14 @@ public class BankTransaction {
     }
 
     // accessor functions
+    public Date getDateObject() {
+    	return this.transactionDate;
+    }
+    
+    public Currency getCurrency() {
+    	return this.currency;
+    }
+    
     public String getDate() {
         return transactionDate.toString();
     }

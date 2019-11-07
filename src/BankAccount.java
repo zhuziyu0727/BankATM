@@ -35,6 +35,18 @@ public class BankAccount implements BankAccountTypes {
     }
 
     // accessor functions
+    public int getNumTransaction() {
+    	return transactions.getHistory().size();
+    }
+    
+    public Date getLastUpdateDateObject() {
+    	return this.lastUpdateDate;
+    }
+    
+    public Date getOpenDateObject() {
+    	return this.openDate;
+    }
+    
     public String getRoutingNumber() {
         return routingNumber.getCode();
     }
@@ -73,6 +85,10 @@ public class BankAccount implements BankAccountTypes {
 
     public String[][] getTransactionHistory() {
         return transactions.getData();
+    }
+    
+    public BankTransactionsHistory getTransactionHistoryObject() {
+    	return this.transactions;
     }
 
     // mutator functions

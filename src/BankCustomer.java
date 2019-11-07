@@ -20,6 +20,14 @@ public class BankCustomer extends Member implements BankAccountTypes {
     public String getCustomerNumber() {
         return customerNumber;
     }
+    
+    public int getNumOfAccount() {
+    	return this.accounts.size();
+    }
+    
+    public ArrayList<BankAccount> getAccounts(){
+    	return this.accounts;
+    }
 
     public ArrayList<String> getAllAccountNumbers() {
         ArrayList<String> allAccountNumbers = new ArrayList<>();
