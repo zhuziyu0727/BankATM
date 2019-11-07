@@ -22,9 +22,17 @@ public class Person {
     public String getName() {
         return name.toString();
     }
-
+    
+    public Name getNameObject() {
+        return name;
+    }
+    
     public String getDOB() {
         return dob.toString();
+    }
+    
+    public Date getDOBObject() {
+        return dob;
     }
 
     // mutator functions

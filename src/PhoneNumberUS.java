@@ -24,6 +24,9 @@ public class PhoneNumberUS extends PhoneNumber {
 
     // mutator function
     public void setPhone(String phone) {
+    	phone = phone.replaceAll("\\(", "");
+        phone = phone.replaceAll("\\)", "");
+        phone = phone.replaceAll("-", "");
         checkPhone(phone);
         setAreaCode(phone.substring(0,3));
         setPhoneNumber(phone.substring(3));
