@@ -34,7 +34,7 @@ public class GUIBankATMFrame extends JFrame {
     public void setAttributes() {
         setTitle("Bank ATM");
         setSize(800, 600);
-        setLocation(200, 100);
+        setLocationRelativeTo(null); //default Center of window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
