@@ -7,15 +7,24 @@ import java.util.ArrayList;
 
 public interface DataOperation {
 	public static void sqliteWrite() throws Exception {            //from memory to database
+		int numStock = 6; //by default, we create 6 stocks
 		Class.forName("org.sqlite.JDBC");
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:db/test.db");
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate("DROP TABLE IF EXISTS customer");
 		stmt.executeUpdate("DROP TABLE IF EXISTS account");
 		stmt.executeUpdate("DROP TABLE IF EXISTS transactions");
+		stmt.executeUpdate("DROP TABLE IF EXISTS stocks");
 		Bank bank = Bank.getInstance();
 		ArrayList<BankCustomer> customers = bank.getCustomers();
-
+		ArrayList<Stock> market = bank.getStockMarket().saveData();
+		
+		stmt.executeUpdate(
+				"CREATE TABLE stocks(Id INT, Name TEXT, totalNumber INT, availableNumber INT, buyPrice DOUBLE, sellPrice DOUBLE)");
+		for(Stock stock : market) {
+			stmt.executeUpdate("INSERT INTO stocks VALUES('" + stock.getId() + "', '" + stock.getName() + "', '" + stock.getTotalNumber() + "', '" + stock.getAvailableNumber() + "', '" + stock.getBuyPriceAmount() + "', '" + stock.getSellPriceAmount() + "')");
+		}
+		
 		stmt.executeUpdate(
 				"CREATE TABLE customer(lastName STRING, firstName STRING, middleName STRING, nickName STRING, Day INT, Month INT, Year INT, Email STRING, Username STRING, Password STRING, PhoneNumber STRING, Address1 STRING, Address2 STRING, City STRING, State STRING, Zipcode TEXT, CustomerNumber STRING, NumAccount INT)");
 
@@ -63,9 +72,10 @@ public interface DataOperation {
 	}
 
 	public static void sqliteRead() throws Exception {
-		int customerAttribute = 18, accountAttribute = 12, transactionAttribute = 8, numCustomer = 0, numAccount = 0, numTransaction = 0;
+		int stockAttribute = 6, customerAttribute = 18, accountAttribute = 12, transactionAttribute = 8, numCustomer = 0, numAccount = 0, numTransaction = 0, numStock = 0;
 		Bank bank = Bank.getInstance();
 		ArrayList<BankCustomer> customers = bank.getCustomers();
+		ArrayList<Stock> market = bank.getStockMarket().saveData();
 		
 		Class.forName("org.sqlite.JDBC");
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:db/test.db");
@@ -82,10 +92,31 @@ public interface DataOperation {
 		if (rs.next()) {
 			numTransaction = rs.getInt(1);
 		}
+		rs = stmt.executeQuery("SELECT COUNT(*) totalCount FROM stocks");
+		if (rs.next()) {
+			numStock = rs.getInt(1);
+		}
 		String[][] customerTable = new String[numCustomer][customerAttribute];
 		String[][] accountTable = new String[numAccount][accountAttribute];
 		String[][] transactionTable = new String[numTransaction][transactionAttribute];
+		String[][] stockTable = new String[numStock][stockAttribute];
 		//System.out.println(numCustomer + " " + numAccount + " " + numTransaction);
+		if(judgeTableExists("stocks")) {
+			rs = stmt.executeQuery("SELECT * FROM stocks");
+			for(int i = 0; i < numStock; i++) {
+				if(rs.next()) {
+					stockTable[i][0] = String.valueOf(rs.getInt("Id"));
+					stockTable[i][1] = rs.getString("Name");
+					stockTable[i][2] = String.valueOf(rs.getInt("totalNumber"));
+					stockTable[i][3] = String.valueOf(rs.getInt("availableNumber"));
+					stockTable[i][4] = String.valueOf(rs.getDouble("buyPrice"));
+					stockTable[i][5] = String.valueOf(rs.getDouble("sellPrice"));
+				}
+				market.get(i).setAvailableNumber(Integer.parseInt(stockTable[i][3]));
+				market.get(i).setBuyPriceAmount(Double.parseDouble(stockTable[i][4]));
+				market.get(i).setSellPriceAmount(Double.parseDouble(stockTable[i][5]));
+			}
+		}
 		if (judgeTableExists("customer") && judgeTableExists("account") && judgeTableExists("transactions")) {
 			rs = stmt.executeQuery("SELECT * FROM customer");
 			for (int i = 0; i < numCustomer; i++) {

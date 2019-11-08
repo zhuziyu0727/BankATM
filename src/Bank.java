@@ -15,6 +15,7 @@ public class Bank implements BankAccountTypes {
     private ArrayList<BankCustomer> customers;
     private BankChargeStandard chargeStandard;
     private MoneyExchangeRate exchangeRate;
+    private StockMarket stockMarket;
 
     // private constructor
     private Bank() {
@@ -27,9 +28,14 @@ public class Bank implements BankAccountTypes {
         customers = new ArrayList<>();
         chargeStandard = new BankChargeStandard();
         exchangeRate = new MoneyExchangeRate();
+        stockMarket = StockMarket.getInstance();
     }
 
     // accessor function
+    public StockMarket getStockMarket() {
+    	return stockMarket;
+    }
+    
     public ArrayList<BankCustomer> getCustomers() {
         return customers;
     }

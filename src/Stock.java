@@ -18,6 +18,8 @@ public class Stock {
         this.id = id;
         this.name = name;
         this.totalNumber = totalNumber;
+        this.buyPrice = new Money();
+        this.sellPrice = new Money();
         initialPrice(totalNumber);
     }
     
@@ -37,8 +39,16 @@ public class Stock {
         this.buyPrice = buyPrice;
     }
 
+    public void setBuyPriceAmount(double amount) {
+    	this.buyPrice.setAmount(amount);
+    }
+    
     public void setSellPrice(Money sellPrice) {
         this.sellPrice = sellPrice;
+    }
+    
+    public void setSellPriceAmount(double amount) {
+    	this.sellPrice.setAmount(amount);
     }
     
     public void initialPrice(int initialNumber) {
@@ -91,13 +101,25 @@ public class Stock {
     public int getId() {
         return id;
     }
+    
+    public String getName() {
+    	return name;
+    }
 
     public Money getBuyPrice() {
         return buyPrice;
     }
-
+    
+    public double getBuyPriceAmount() {
+    	return buyPrice.getAmount();
+    }
+    
     public Money getSellPrice() {
         return sellPrice;
+    }
+    
+    public double getSellPriceAmount() {
+    	return sellPrice.getAmount();
     }
     
     public int getTotalNumber() {
