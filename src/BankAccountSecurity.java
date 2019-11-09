@@ -55,7 +55,7 @@ public class BankAccountSecurity extends BankAccount {
 		Collections.sort(stockHolding, new StockComparator());
 	}
 	
-	public double getAvgBoughtPrice (Stock stock) {
+	public double getAvgBoughtPriceByStock (Stock stock) {
 		if(getStockVolumeByStock(stock) == 0) {
 			return 0;
 		}else {
