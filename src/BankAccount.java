@@ -144,7 +144,7 @@ public class BankAccount implements BankAccountTypes {
     }
 
     // check functions
-    private void checkFromTo(String from, String to) {
+    protected void checkFromTo(String from, String to) {
         if (from.equals("") && to.equals(""))
             throw new IllegalArgumentException("\"From\" and \"To\" must not be both empty.");
         else if (!from.equals("") && !to.equals(""))
