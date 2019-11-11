@@ -28,7 +28,7 @@ public interface DataOperation {
 		}
 
 		stmt.executeUpdate(
-				"CREATE TABLE customer(lastName STRING, firstName STRING, middleName STRING, nickName STRING, Day INT, Month INT, Year INT, Email STRING, Username STRING, Password STRING, PhoneNumber STRING, Address1 STRING, Address2 STRING, City STRING, State STRING, Zipcode TEXT, CustomerNumber STRING, NumAccount INT)");
+				"CREATE TABLE customer(lastName TEXT, firstName TEXT, middleName TEXT, nickName TEXT, Day INT, Month INT, Year INT, Email TEXT, Username TEXT, Password TEXT, PhoneNumber TEXT, Address1 TEXT, Address2 TEXT, City TEXT, State TEXT, Zipcode TEXT, CustomerNumber TEXT, NumAccount INT)");
 		// NumAccount is getCustomerNumber() - getNumOfSecurityAccount()
 		for (BankCustomer customer : customers) {
 			stmt.executeUpdate("INSERT INTO customer VALUES( '" + customer.getNameObject().getLastName() + "' , '"
@@ -43,7 +43,7 @@ public interface DataOperation {
 					+ (customer.getNumOfAccount() - customer.getNumOfSecurityAccount()) + "')");
 		}
 		stmt.executeUpdate(
-				"CREATE TABLE account(routingNumber STRING, accountNumber STRING, MoneyAmount DOUBLE, currencyType STRING, OpenDay INT, OpenMonth INT, OpenYear INT, lastUpdateDay INT, lastUpdateMonth INT, lastUpdateYear INT, type STRING, NumTransaction INT)");
+				"CREATE TABLE account(routingNumber TEXT, accountNumber TEXT, MoneyAmount DOUBLE, currencyType TEXT, OpenDay INT, OpenMonth INT, OpenYear INT, lastUpdateDay INT, lastUpdateMonth INT, lastUpdateYear INT, type TEXT, NumTransaction INT)");
 		for (BankCustomer customer : customers) {
 			for (BankAccount account : customer.getAccounts()) {
 				if (!account.getType().equals(BankAccountTypes.SECURITY)) {
@@ -60,7 +60,7 @@ public interface DataOperation {
 		}
 
 		stmt.executeUpdate(
-				"CREATE TABLE transactions(transactionDay INT, transactionMonth INT, transactionYear INT, Currency STRING, Amount DOUBLE, Available DOUBLE, FromAccount STRING, ToAccount STRING)");
+				"CREATE TABLE transactions(transactionDay INT, transactionMonth INT, transactionYear INT, Currency TEXT, Amount DOUBLE, Available DOUBLE, FromAccount TEXT, ToAccount TEXT)");
 		for (BankCustomer customer : customers) {
 			for (BankAccount account : customer.getAccounts()) {
 				if (!account.getType().equals(BankAccountTypes.SECURITY)) {
@@ -88,7 +88,7 @@ public interface DataOperation {
 		Class.forName("org.sqlite.JDBC");
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:db/test.db");
 		Statement stmt = conn.createStatement();
-		if (judgeTableExists("customer") && judgeTableExists("account") && judgeTableExists("transactions"))
+		if (!judgeTableExists("customer") || !judgeTableExists("account") || !judgeTableExists("transactions"))
 			return;
 		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) totalCount FROM customer");
 		if (rs.next()) {

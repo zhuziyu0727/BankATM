@@ -8,7 +8,7 @@ public class Main implements DataOperation {
 	public static void main(String[] args) {
 		try {
 			DataOperation.sqliteRead();
-			SecurityDataOperation.sqliteRead();
+			//SecurityDataOperation.sqliteRead();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -31,7 +31,7 @@ public class Main implements DataOperation {
 			public void windowClosing(java.awt.event.WindowEvent e) {
 				try {
 					DataOperation.sqliteWrite();
-					SecurityDataOperation.sqliteWrite();
+					//SecurityDataOperation.sqliteWrite();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

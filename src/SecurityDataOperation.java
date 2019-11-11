@@ -16,7 +16,7 @@ public interface SecurityDataOperation {
 		ArrayList<BankCustomer> customers = bank.getCustomers();
 
 		stmt.executeUpdate(
-				"CREATE TABLE securityAccount(routingNumber STRING, accountNumber STRING, MoneyAmount DOUBLE, currencyType STRING, OpenDay INT, OpenMonth INT, OpenYear INT, lastUpdateDay INT, lastUpdateMonth INT, lastUpdateYear INT, bindedSavingAccountNumber STRING, NumTransaction INT, NumStockHolding INT)");
+				"CREATE TABLE securityAccount(routingNumber TEXT, accountNumber TEXT, MoneyAmount DOUBLE, currencyType TEXT, OpenDay INT, OpenMonth INT, OpenYear INT, lastUpdateDay INT, lastUpdateMonth INT, lastUpdateYear INT, bindedSavingAccountNumber TEXT, NumTransaction INT, NumStockHolding INT)");
 
 		for (BankCustomer customer : customers) {
 			for (BankAccount account : customer.getAccounts()) {
@@ -48,7 +48,7 @@ public interface SecurityDataOperation {
 		}
 
 		stmt.executeUpdate(
-				"CREATE TABLE stockTransactions(transactionDay INT, transactionMonth INT, transactionYear INT, Currency STRING, FromAccount STRING, ToAccount STRING, stockId INT, unitPrice DOUBLE, numOfShares INT)");
+				"CREATE TABLE stockTransactions(transactionDay INT, transactionMonth INT, transactionYear INT, Currency TEXT, FromAccount TEXT, ToAccount TEXT, stockId INT, unitPrice DOUBLE, numOfShares INT)");
 		for (BankCustomer customer : customers) {
 			for (BankAccount account : customer.getAccounts()) {
 				if (account.getType().equals(BankAccountTypes.SECURITY)) {
