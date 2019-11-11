@@ -55,6 +55,17 @@ public class StockMarket {
         }
         return false;
     }
+    
+    //When the manager wants to modify the number of a stock
+    public boolean modifyStock(Stock stock, int number) {
+    	for (Stock stck: market) {
+            if (stck.isEqual(stock)) {
+            	stck.addNumber(number);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Stock getStockById(int stockId) {
         for (Stock stock: market) {
