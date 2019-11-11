@@ -45,6 +45,10 @@ public class BankStockTransaction extends BankTransaction {
         this.unitPrice = unitPrice;
     }
     
+    public void setUnitPriceAmount(double unitPrice) {
+    	this.unitPrice.setAmount(unitPrice);
+    }
+    
     public void setNumberOfShares(int number) {
         this.numberOfShares = number;
     }

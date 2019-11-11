@@ -8,6 +8,10 @@ public class BankStockTransactionsHistory {
 		stockHistory = new ArrayList<>();
 	}
     // accessor function
+	
+	public ArrayList<BankStockTransaction> getStockHistory(){
+		return this.stockHistory;
+	}
 	//String[] column = {"DATE", "FROM", "TO", "STOCKID", "UNITPRICE", "NUMBER OF SHARES"};
     public String[][] getData() {
         String[][] data = new String[stockHistory.size()][6];

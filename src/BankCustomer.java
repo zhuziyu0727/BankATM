@@ -17,6 +17,15 @@ public class BankCustomer extends Member implements BankAccountTypes {
     }
 
     // accessor function
+    public int getNumOfSecurityAccount() {
+    	int num = 0;
+    	for(BankAccount account : accounts) {
+    		if(account.getType().equals(BankAccountTypes.SECURITY))
+    			num++;
+    	}
+    	return num;
+    }
+    
     public String getCustomerNumber() {
         return customerNumber;
     }

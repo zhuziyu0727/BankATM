@@ -27,6 +27,22 @@ public class BankAccountSecurity extends BankAccount {
 		return this.stockHolding;
 	}
 	
+	public int getNumStockTransaction() {
+		return this.stockTransactions.getStockHistory().size();
+	}
+	
+	public ArrayList<BankStockTransaction> getStockTransaction(){
+		return this.stockTransactions.getStockHistory();
+	}
+	
+	public int getNumStockHolding() {
+		return this.stockHolding.size();
+	}
+	
+	//mutator functions
+	public void setBindedSavingAccountNumber(String BindedSavingAccountNumber) {
+		this.bindedSavingAccountNumber.setCode(BindedSavingAccountNumber);
+	}
 	// customer functions
 	public void buyStock(Stock stock, int amount) {
 		if(amount < 0) {
