@@ -274,13 +274,13 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         phoneText.setText(bank.getPhoneByCustomer(customer));
 
         checkingNumberText.setEditable(false);
-        checkingNumberText.setText("2");
+        checkingNumberText.setText(Integer.toString(bank.getNumberofAccountCheckingByCustomer(customer)));
 
         savingNumberText.setEditable(false);
-        savingNumberText.setText("2");
+        savingNumberText.setText(Integer.toString(bank.getNumberofAccountSavingByCustomer(customer)));
 
         loanNumberText.setEditable(false);
-        loanNumberText.setText("2");
+        loanNumberText.setText(Integer.toString(bank.getNumberofAccountLoanByCustomer(customer)));
     }
 
     public void displayProfile() {
@@ -961,10 +961,10 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         dateOpenText.setText("..");  // getText
 
         stocksNumberText.setEditable(false);
-        stocksNumberText.setText("2"); // get stocks number
+        stocksNumberText.setText(Integer.toString(bank.getNumStockHoldingByAccountNumber(customer, accountNumber))); // get stocks number
 
         stocksValueText.setEditable(false);
-        stocksValueText.setText("2"); // get stocks value
+        stocksValueText.setText(Double.toString(bank.getStockTotalValueByCustomerAccountNumber(customer, accountNumber))); // get stocks value
     }
 
     public void displaySecurityMarket() {
@@ -987,6 +987,11 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         add(myStockList);
 
         myStockList.setBounds (290, 155, 445, 405);
+
+        String[] column = {"STOCKID", "STOCKNAME ", "MYSTOCKCOUNTS"};
+        String[][] data = bank.getCustomerMyStocksByCustomerAccountNumber(customer, securityAccountNumber);
+        JTable transactionsTable = new JTable(data, column);
+        myStockList.getViewport().add(transactionsTable);
     }
 
     public void displaySecurityBuy() {
@@ -1023,7 +1028,10 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         stockIdText.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                buyPriceText.setText("sss"); // set Price
+
+                 int StockId = Integer.parseInt(stockIdText.getText());
+                 Stock stock = bank.getStockById(StockId);
+                 buyPriceText.setText(Double.toString(bank.getBuyPriceByStock(stock)));
             }
         });
 
@@ -1033,7 +1041,13 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    // buy this stock
+                    String stockId = stockIdText.getText();
+                    int num = Integer.parseInt(buyNumberText.getText());
+                    LocalDateTime now = LocalDateTime.now();
+                    int day = now.getDayOfMonth();
+                    int month = now.getMonthValue();
+                    int year = now.getYear();
+                    bank.buyStockByAccountNumber(customer, securityAccountNumber, stockId, num, day, month, year);
                     warning.setForeground(Color.GREEN);
                     warning.setText("Success");
                 } catch (Exception e) {
@@ -1090,8 +1104,10 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         stockIdText.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                sellPriceText.setText("sss"); // set Price
-                moneySpentText.setText("sss"); // ....
+                int StockId = Integer.parseInt(stockIdText.getText());
+                Stock stock = bank.getStockById(StockId);
+                sellPriceText.setText(Double.toString(bank.getSellPriceByStock(stock))); // set Price
+                moneySpentText.setText(bank.getAvgBoughtPriceByStockIdByCustomerAccountNumber(customer, securityAccountNumber, stockIdText.getText())); // ....
                 numberInHandText.setText("sss"); // ...
             }
         });
@@ -1107,6 +1123,13 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     // sell this stock
+                    String stockId = stockIdText.getText();
+                    int num = Integer.parseInt(sellNumberText.getText());
+                    LocalDateTime now = LocalDateTime.now();
+                    int day = now.getDayOfMonth();
+                    int month = now.getMonthValue();
+                    int year = now.getYear();
+                    bank.sellStockByAccountNumber(customer, securityAccountNumber, stockId, num, day, month, year);
                     warning.setForeground(Color.GREEN);
                     warning.setText("Success");
                 } catch (Exception e) {
@@ -1123,5 +1146,10 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         add(stockHistory);
 
         stockHistory.setBounds (290, 155, 445, 405);
+
+        String[] column = {"DATE", "FROM", "TO", "STOCKID", "UNITPRICE", "NUMBER OF SHARES"};
+        String[][] data = bank.getStockTransactionHistoryByCustomerAccountNumber(customer, accountNumber);
+        JTable transactionsTable = new JTable(data, column);
+        stockHistory.getViewport().add(transactionsTable);
     }
 }
