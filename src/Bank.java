@@ -199,7 +199,11 @@ public class Bank implements BankAccountTypes {
         return customer.getTransactionHistoryByAccountNumber(accountNumber);
     }
     
-    //security account functions
+    //security account functions    
+    public String getSecurityAccountNumberBySavingAccountNumber(BankCustomer customer,String accountNumber) {
+    	return customer.getSecurityAccountBySavingAccountNumber(accountNumber);
+    }
+    
     public int getNumStockHoldingByAccountNumber(BankCustomer customer,String accountNumber) {
     	return customer.getNumStockHoldingByAccountNumber(accountNumber);
     }

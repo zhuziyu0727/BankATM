@@ -171,6 +171,15 @@ public class BankCustomer extends Member implements BankAccountTypes {
         return false;
     }
     
+    public String getSecurityAccountBySavingAccountNumber(String savingAccountNumber) {
+        for (BankAccount b: accounts)
+            if (b.getType() == "Security") {
+            	BankAccountSecurity securityAccount = (BankAccountSecurity) getAccountByAccountNumber(b.getAccountNumber());
+            	if(securityAccount.getBindedSavingAccountNumber().getCode() == savingAccountNumber) return securityAccount.getAccountNumber();
+            }
+        return "";
+    }
+    
 	public boolean isSecurityClosable(String accountNumber) {
 		BankAccountSecurity security = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
 		return security.isClosable();
