@@ -199,7 +199,7 @@ public class Bank implements BankAccountTypes {
         return customer.getTransactionHistoryByAccountNumber(accountNumber);
     }
     
-    //security account functions    
+    //security account functions
     public String getSecurityAccountNumberBySavingAccountNumber(BankCustomer customer,String accountNumber) {
     	return customer.getSecurityAccountBySavingAccountNumber(accountNumber);
     }
@@ -274,6 +274,10 @@ public class Bank implements BankAccountTypes {
     
     public void closeSecurityAccount(BankCustomer customer, String accountNumber) {
         customer.closeSecurityAccount(accountNumber);
+    }
+    
+    public int getstockCountsByStockIdByAccountNumber(BankCustomer customer, String accountNumber, String stockid) {
+    	return customer.getstockCountsByStockId(accountNumber, stockid);
     }
     
     // primary functions

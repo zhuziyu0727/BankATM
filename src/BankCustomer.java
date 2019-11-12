@@ -137,6 +137,11 @@ public class BankCustomer extends Member implements BankAccountTypes {
     	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
         return b;
     }
+  
+    public int getstockCountsByStockId(String accountNumber, String stockid) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+        return b.getStockVolumeByStockId(Integer.parseInt(stockid));
+    }
     
     public int getNumStockHoldingByAccountNumber(String accountNumber) {
     	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
@@ -307,5 +312,13 @@ public class BankCustomer extends Member implements BankAccountTypes {
                 return false;
         }
         return true;
+    }
+    public boolean checkOpenSecurityAccount(String accountNumber, String bindedSavingNumber,
+            double savingbalance, int day, int month, int year, double threshHold) {
+    	if (!checkEligibleAccountNumber(accountNumber))
+    		return false;
+    	if (savingbalance < threshHold)
+    		return false;
+    	return true;
     }
 }
