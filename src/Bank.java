@@ -83,7 +83,7 @@ public class Bank implements BankAccountTypes {
         Stock stock = new Stock(id, name, num);
         stockMarket.addStock(stock);
         stockMarket.modifyStockBuyPrice(stock, buy);
-        stockMarket.modifyStockBuyPrice(stock, sell);
+        stockMarket.modifyStockSellPrice(stock, sell);
     }
 
     public void deleteStock(int id) {
