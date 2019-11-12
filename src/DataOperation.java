@@ -57,7 +57,7 @@ public interface DataOperation {
 							+ account.getLastUpdateDateObject().getYear() + "','" + account.getType() + "', '"
 							+ account.getNumTransaction() + "')");
 					}
-					else {
+					else if(account.getType().equals(BankAccountTypes.SAVING)){
 						stmt.executeUpdate("INSERT INTO account VALUES( '" + account.getRoutingNumber() + "' , '"
 								+ account.getAccountNumber() + "', '" + account.getBalance() + "', '"
 								+ account.getCurrencyType() + "', '" + account.getOpenDateObject().getDay() + "', '"
@@ -222,7 +222,8 @@ public interface DataOperation {
 				customer.setZipCode(customerTable[i][15]);
 			for (int j = 0; j < Integer.parseInt(customerTable[i][17]); j++) {
 				if (rowAccount < numAccount) {
-					BankAccount account = new BankAccount(accountTable[rowAccount][3]);
+					if(accountTable[rowAccount][12].equals(BankAccountTypes.SAVING)) {
+					BankAccountSaving account = new BankAccountSaving(accountTable[rowAccount][3]);
 					account.open(Integer.parseInt(accountTable[rowAccount][4]),
 							Integer.parseInt(accountTable[rowAccount][5]),
 							Integer.parseInt(accountTable[rowAccount][6]));
@@ -233,9 +234,7 @@ public interface DataOperation {
 					account.setLastUpdateDate(Integer.parseInt(accountTable[rowAccount][7]),
 							Integer.parseInt(accountTable[rowAccount][8]),
 							Integer.parseInt(accountTable[rowAccount][9]));
-					if(account.getType().equals(BankAccountTypes.SAVING)) {
-						((BankAccountSaving) account).setBindedSecurityAccountNumber(accountTable[i][12]);
-					}
+					((BankAccountSaving) account).setBindedSecurityAccountNumber(accountTable[i][12]);
 					for (int q = 0; q < Integer.parseInt(accountTable[rowAccount][11]); q++) {
 						if (rowTransaction < numTransaction) {
 							BankTransaction transaction = new BankTransaction();
@@ -253,6 +252,37 @@ public interface DataOperation {
 					}
 					customer.getAccounts().add(account);
 					rowAccount++;
+					}
+					else {
+						BankAccount account = new BankAccount(accountTable[rowAccount][3]);
+						account.open(Integer.parseInt(accountTable[rowAccount][4]),
+								Integer.parseInt(accountTable[rowAccount][5]),
+								Integer.parseInt(accountTable[rowAccount][6]));
+						account.setRoutingNumber(accountTable[rowAccount][0]);
+						account.setAccountNumber(accountTable[rowAccount][1]);
+						account.setBalance(Double.parseDouble(accountTable[rowAccount][2]));
+						account.setType(accountTable[rowAccount][10]);
+						account.setLastUpdateDate(Integer.parseInt(accountTable[rowAccount][7]),
+								Integer.parseInt(accountTable[rowAccount][8]),
+								Integer.parseInt(accountTable[rowAccount][9]));
+						for (int q = 0; q < Integer.parseInt(accountTable[rowAccount][11]); q++) {
+							if (rowTransaction < numTransaction) {
+								BankTransaction transaction = new BankTransaction();
+								transaction.setTransactionDate(Integer.parseInt(transactionTable[rowTransaction][0]),
+										Integer.parseInt(transactionTable[rowTransaction][1]),
+										Integer.parseInt(transactionTable[rowTransaction][2]));
+								transaction.setCurrency(transactionTable[rowTransaction][3]);
+								transaction.setAmount(Double.parseDouble(transactionTable[rowTransaction][4]));
+								transaction.setAvailable(Double.parseDouble(transactionTable[rowTransaction][5]));
+								transaction.setFrom(transactionTable[rowTransaction][6]);
+								transaction.setTo(transactionTable[rowTransaction][7]);
+								account.getTransactionHistoryObject().getHistory().add(transaction);
+								rowTransaction++;
+							}
+						}
+						customer.getAccounts().add(account);
+						rowAccount++;
+					}
 				}
 			}
 			bank.getCustomers().add(customer);
