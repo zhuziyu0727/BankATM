@@ -18,6 +18,7 @@ public class Stock {
         this.id = id;
         this.name = name;
         this.totalNumber = totalNumber;
+	this.availableNumber = totalNumber;
         this.buyPrice = new Money();
         this.sellPrice = new Money();
         initialPrice(totalNumber);
@@ -27,6 +28,7 @@ public class Stock {
         this.id = id;
         this.name = name;
         this.totalNumber = defaultTotal;
+	this.availableNumber = defaultTotal;
         initialPrice(defaultTotal);
     }
     //The fuction that show a stock
