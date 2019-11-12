@@ -7,5 +7,7 @@ all classes with names starting with "Bank" are only used for Bank project
 all classes with names starting with "GUI" are only used for GUI
 other classes can be generally used.
 
+environment: sqlite 3.30
+
 The interface DataOperation is used to write and read information of stocks, account, customer and transactions between memory and database.
 The interface SecurityDataOperation is used to write and read information of security account, security account transactions between memory and database.
