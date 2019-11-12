@@ -1,129 +1,284 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class GUIBankManagerPanel extends GUIBankPanel {
-    // constructor
+    private Bank bank;
+    private String customerUserName;
+
+    private JLabel welcome1;
+    private JLabel welcome2;
+    private JButton history;
+    private JButton savInt;
+    private JButton loanInt;
+    private JButton stocks;
+    private JButton exit;
+    private JSeparator divider1;
+    private JLabel logo;
+    private JSeparator divider2;
+    private JComboBox customersList;
+    private JScrollPane customerHistory;
+
+    private JButton market;
+    private JButton changePrice;
+    private JButton mutator;
+    private JScrollPane marketList;
+
+    private JComboBox stockList;
+    private JLabel buyPriceLabel;
+    private JTextField buyPriceText;
+    private JLabel sellPriceLabel;
+    private JTextField sellPriceText;
+    private JLabel numOwnedLabel;
+    private JTextField numOwnedText;
+    private JLabel numVoidLabel;
+    private JTextField numVoidText;
+    private JLabel warning;
+    private JButton update;
+
+    private JLabel stockIdLabel;
+    private JTextField stockIdText;
+    private JButton delete;
+    // buyPriceLabel
+    // buyPriceText
+    // sellPriceLabel
+    // sellPriceText
+    private JLabel numPutLabel;
+    private JTextField numPutText;
+    // warning
+    private JButton add;
+
     public GUIBankManagerPanel(GUIBankATMFrame frame) {
         super(frame);
-        refresh();
+        bank = Bank.getInstance();
+        displayHistory();
     }
 
-    public void refresh() {
+    public void basicDisplay() {
         removeAll();
+        revalidate();
         repaint();
-        addElements();
-        getFrame().display("Manager...");
+
+        welcome1 = new JLabel("Welcome!");
+        welcome2 = new JLabel("manager");
+        history = new JButton("History");
+        savInt = new JButton("Sav. Int.");
+        loanInt = new JButton("Loan Int.");
+        stocks = new JButton("Stocks");
+        exit = new JButton("EXIT");
+        divider1 = new JSeparator(SwingConstants.VERTICAL);
+        logo = new JLabel("Bank ATM");
+        divider2 = new JSeparator(SwingConstants.HORIZONTAL);
+
+        setPreferredSize(new Dimension(800, 600));
+        setLayout(null);
+
+        add(welcome1);
+        add(welcome2);
+        add(history);
+        add(savInt);
+        add(loanInt);
+        add(stocks);
+        add(exit);
+        add(divider1);
+        add(logo);
+        add(divider2);
+
+        welcome1.setBounds (20, 15, 100, 25);
+        welcome2.setBounds (20, 40, 100, 25);
+        history.setBounds (20, 100, 100, 25);
+        savInt.setBounds (20, 145, 100, 25);
+        loanInt.setBounds (20, 190, 100, 25);
+        stocks.setBounds (20, 235, 100, 25);
+        exit.setBounds (20, 545, 100, 25);
+        divider1.setBounds (130, 10, 1, 580);
+        logo.setBounds (155, 15, 100, 25);
+        divider2.setBounds (140, 40, 650, 100);
+
+        savInt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                LocalDateTime now = LocalDateTime.now();
+                int day = now.getDayOfMonth();
+                int month = now.getMonthValue();
+                int year = now.getYear();
+                bank.increaseSaving(day, month, year);
+                displayHistory();
+            }
+        });
+
+        loanInt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                LocalDateTime now = LocalDateTime.now();
+                int day = now.getDayOfMonth();
+                int month = now.getMonthValue();
+                int year = now.getYear();
+                bank.increaseLoan(day, month, year);
+                displayHistory();
+            }
+        });
+
+        stocks.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                stockMarket();
+            }
+        });
     }
 
-    // add elements
-    public void addElements() {
-        JLabel message = new JLabel("Welcome!");
-        
-        JButton logoutButton = new JButton("LOGOUT");
-        GUIBankCustomerPanelLogoutEvent logoutEvent = new GUIBankCustomerPanelLogoutEvent(getFrame());
-        logoutButton.addActionListener(logoutEvent);
+    public void displayHistory() {
+        basicDisplay();
 
-        JButton savingInterestButton = new JButton("Saving Interest");
-        GUIBankManagerPanelSavingInterestEvent savingInterestEvent = new GUIBankManagerPanelSavingInterestEvent(getFrame(), this);
-        savingInterestButton.addActionListener(savingInterestEvent);
+        customersList = new JComboBox();
+        customerHistory = new JScrollPane();
 
-        JButton loanInterestButton = new JButton("Loan Interest");
-        GUIBankManagerPanelLoanInterestEvent loanInterestEvent = new GUIBankManagerPanelLoanInterestEvent(getFrame(), this);
-        loanInterestButton.addActionListener(loanInterestEvent);
+        add(customersList);
+        add(customerHistory);
 
-        GUIBankManagerPanelTransactionsPanel transactionsPanel = new GUIBankManagerPanelTransactionsPanel(getFrame());
+        customersList.setBounds (155, 65, 580, 25);
+        customerHistory.setBounds (155, 100, 580, 465);
 
-        JTextField searchUserText = new JTextField();
-        
-        JButton stockManageButton = new JButton("Stock Management");
-        GUIBankManagerPanelStockManageEvent stockManageEvent = new GUIBankManagerPanelStockManageEvent(getFrame()); // NEED IMPLEMENT
-        stockManageButton.addActionListener(stockManageEvent);
-        
-        JButton listCustomerButton = new JButton("List Customers");
-        GUIBankManagerPanelListCustomerEvent listCustomerEvent = new GUIBankManagerPanelListCustomerEvent(getFrame(), message);
-        listCustomerButton.addActionListener(listCustomerEvent);
-        
-        JButton searchButton = new JButton("Search");
-        GUIBankManagerPanelSearchCustomerEvent searchCustomerEvent = new GUIBankManagerPanelSearchCustomerEvent(getFrame(), searchUserText, transactionsPanel, message);
-        searchButton.addActionListener(searchCustomerEvent);
-                
-        this.setBorder(new EmptyBorder(10, 0, 10, 0));
-        GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-        gridBagLayout.columnWidths = new int[]{150, 160, 250, 170, 170};
-        setLayout(gridBagLayout);
-        GridBagConstraints gbc = new GridBagConstraints();
+        ArrayList<BankCustomer> customers = bank.getCustomers();
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.insets = new Insets(0, 0, 5, 5);
-        add(logoutButton, gbc);
+        if (customers.size() != 0) {
+            for (BankCustomer customer: customers) {
+                customersList.addItem(bank.getUsernameByCustomer(customer));
+            }
+            if (customerUserName == null) {
+                customerUserName = (String) customersList.getSelectedItem();
+            }
+            customersList.setSelectedItem(customerUserName);
+        }
+    }
 
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 5, 5);
-        add(savingInterestButton, gbc);
+    public void displayStocks() {
+        basicDisplay();
 
-        gbc.gridx = 4;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(0, 0, 5, 0);
-        add(loanInterestButton, gbc);
+        market = new JButton("Market");
+        changePrice = new JButton("Change Price");
+        mutator = new JButton("Add or Delete");
 
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3;
-        gbc.gridheight = 7;
-        gbc.weighty = 1;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(transactionsPanel, gbc);
-        
-        gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.gridheight = 7;
-        gbc.insets = new Insets(0, 0, 5, 5);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(message, gbc);
-        
-        gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 0, 5, 5);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        add(stockManageButton, gbc);
-        
-        gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        gbc.gridx = 2;
-        gbc.gridy = 8;
-        add(listCustomerButton, gbc);
-        
-        gbc = new GridBagConstraints();  
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        gbc.gridx = 3;
-        gbc.gridy = 8;
-        add(searchUserText, gbc);
-        searchUserText.setColumns(15);
-        searchUserText.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        gbc = new GridBagConstraints();
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.gridx = 4;
-        gbc.gridy = 8;
-        add(searchButton, gbc);
-        
+        add(market);
+        add(changePrice);
+        add(mutator);
+
+        market.setBounds (175, 100, 170, 25);
+        changePrice.setBounds (350, 100, 170, 25);
+        mutator.setBounds (525, 100, 170, 25);
+
+        market.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                stockMarket();
+            }
+        });
+
+        changePrice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                stockChangePrice();
+            }
+        });
+
+        mutator.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                stockMutate();
+            }
+        });
+    }
+
+    public void stockMarket() {
+        displayStocks();
+
+        marketList = new JScrollPane();
+
+        add(marketList);
+
+        marketList.setBounds (175, 145, 520, 425);
+    }
+
+    public void stockChangePrice() {
+        displayStocks();
+
+        stockList = new JComboBox();
+        buyPriceLabel = new JLabel("Buy price");
+        buyPriceText = new JTextField();
+        sellPriceLabel = new JLabel("Sell price");
+        sellPriceText = new JTextField();
+        numOwnedLabel = new JLabel("# bought by customers");
+        numOwnedText = new JTextField();
+        numVoidLabel = new JLabel("# still in market");
+        numVoidText = new JTextField();
+        warning = new JLabel();
+        update = new JButton("UPDATE");
+
+        add(stockList);
+        add(buyPriceLabel);
+        add(buyPriceText);
+        add(sellPriceLabel);
+        add(sellPriceText);
+        add(numOwnedLabel);
+        add(numOwnedText);
+        add(numVoidLabel);
+        add(numVoidText);
+        add(warning);
+        add(update);
+
+        stockList.setBounds (175, 145, 250, 25);
+        buyPriceLabel.setBounds (175, 170, 250, 25);
+        buyPriceText.setBounds (175, 195, 250, 25);
+        sellPriceLabel.setBounds (175, 220, 250, 25);
+        sellPriceText.setBounds (175, 245, 250, 25);
+        numOwnedLabel.setBounds (175, 270, 250, 25);
+        numOwnedText.setBounds (175, 295, 250, 25);
+        numVoidLabel.setBounds (175, 320, 250, 25);
+        numVoidText.setBounds (175, 345, 250, 25);
+        warning.setBounds (175, 370, 405, 30);
+        update.setBounds (175, 410, 100, 25);
+    }
+
+    public void stockMutate() {
+        displayStocks();
+
+        stockIdLabel = new JLabel("Stock ID");
+        stockIdText = new JTextField();
+        delete = new JButton("DELETE");
+        buyPriceLabel = new JLabel("Buy price");
+        buyPriceText = new JTextField();
+        sellPriceLabel = new JLabel("Sell price");
+        sellPriceText = new JTextField();
+        numPutLabel = new JLabel("# to put");
+        numPutText = new JTextField();
+        warning = new JLabel();
+        add = new JButton("ADD");
+
+        add(stockIdLabel);
+        add(stockIdText);
+        add(delete);
+        add(buyPriceLabel);
+        add(buyPriceText);
+        add(sellPriceLabel);
+        add(sellPriceText);
+        add(numPutLabel);
+        add(numPutText);
+        add(warning);
+        add(add);
+
+        stockIdLabel.setBounds (175, 155, 235, 25);
+        stockIdText.setBounds (175, 180, 235, 25);
+        delete.setBounds (565, 180, 130, 25);
+        buyPriceLabel.setBounds (175, 205, 235, 25);
+        buyPriceText.setBounds (175, 230, 235, 25);
+        sellPriceLabel.setBounds (175, 255, 235, 25);
+        sellPriceText.setBounds (175, 280, 235, 25);
+        numPutLabel.setBounds (175, 305, 235, 25);
+        numPutText.setBounds (175, 330, 235, 25);
+        warning.setBounds (175, 355, 520, 25);
+        add.setBounds (175, 395, 100, 25);
     }
 }

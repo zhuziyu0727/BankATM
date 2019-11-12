@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
 
 /**
@@ -14,6 +13,7 @@ public class GUIBankATMFrame extends JFrame {
     public GUIBankATMFrame() {
         setAttributes();
         generateRoutingNumber();
+        setResizable(false);
     }
 
     // accessor function
@@ -33,7 +33,7 @@ public class GUIBankATMFrame extends JFrame {
     // other functions
     public void setAttributes() {
         setTitle("Bank ATM");
-        setSize(800, 600);
+        setSize(850, 650);
         setLocationRelativeTo(null); //default Center of window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

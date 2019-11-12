@@ -12,10 +12,10 @@ public class GUIBankCustomerPanelAccountsPanelOpenAccountPanelOpenEvent extends 
     private JComboBox currencyTypeComboBox;
     private JTextField valueField;
     private JLabel feedbackLabel;
-    private GUIBankCustomerPanel customerPanel;
+    private GUIBankCustomerPanel_OLD customerPanel;
 
     // constructor
-    public GUIBankCustomerPanelAccountsPanelOpenAccountPanelOpenEvent(GUIBankATMFrame frame, GUIBankCustomerPanel customerPanel) {
+    public GUIBankCustomerPanelAccountsPanelOpenAccountPanelOpenEvent(GUIBankATMFrame frame, GUIBankCustomerPanel_OLD customerPanel) {
         super(frame);
         this.customerPanel = customerPanel;
     }

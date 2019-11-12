@@ -1,14 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class GUIBankCustomerPanelTransferPanel extends GUIBankPanel {
     // instance
-    private GUIBankCustomerPanel customerPanel;
+    private GUIBankCustomerPanel_OLD customerPanel;
 
     // constructor
-    public GUIBankCustomerPanelTransferPanel(GUIBankATMFrame frame, GUIBankCustomerPanel customerPanel) {
+    public GUIBankCustomerPanelTransferPanel(GUIBankATMFrame frame, GUIBankCustomerPanel_OLD customerPanel) {
         super(frame);
         this.customerPanel = customerPanel;
         refresh();

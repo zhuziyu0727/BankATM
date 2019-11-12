@@ -2,9 +2,9 @@ import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
 
 public class GUIBankManagerPanelLoanInterestEvent extends GUIBankEvent {
-    private GUIBankManagerPanel managerPanel;
+    private GUIBankManagerPanel_OLD managerPanel;
 
-    public GUIBankManagerPanelLoanInterestEvent(GUIBankATMFrame frame, GUIBankManagerPanel managerPanel) {
+    public GUIBankManagerPanelLoanInterestEvent(GUIBankATMFrame frame, GUIBankManagerPanel_OLD managerPanel) {
         super(frame);
         this.managerPanel = managerPanel;
     }

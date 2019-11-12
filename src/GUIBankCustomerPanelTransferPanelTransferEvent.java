@@ -12,10 +12,10 @@ public class GUIBankCustomerPanelTransferPanelTransferEvent extends GUIBankEvent
     private JTextField targetAccountNumberField;
     private JTextField valueField;
     private JLabel feedbackLabel;
-    private GUIBankCustomerPanel customerPanel;
+    private GUIBankCustomerPanel_OLD customerPanel;
 
     // constructor
-    public GUIBankCustomerPanelTransferPanelTransferEvent(GUIBankATMFrame frame, GUIBankCustomerPanel customerPanel) {
+    public GUIBankCustomerPanelTransferPanelTransferEvent(GUIBankATMFrame frame, GUIBankCustomerPanel_OLD customerPanel) {
         super(frame);
         this.customerPanel = customerPanel;
     }

@@ -8,13 +8,13 @@ public class GUIBankCustomerPanelAccountsPanelOpenAccountPanel extends GUIBankPa
         implements BankAccountTypes, CurrencyAbbrs {
     // instance variable with private access
     private GUIBankCustomerPanelAccountsPanel panel;
-    private GUIBankCustomerPanel customerPanel;
+    private GUIBankCustomerPanel_OLD customerPanel;
 
 
     // constructor
     public GUIBankCustomerPanelAccountsPanelOpenAccountPanel(GUIBankATMFrame frame,
                                                              GUIBankCustomerPanelAccountsPanel panel,
-                                                             GUIBankCustomerPanel customerPanel) {
+                                                             GUIBankCustomerPanel_OLD customerPanel) {
         super(frame);
         this.panel = panel;
         this.customerPanel = customerPanel;

@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class GUIBankPanel extends JPanel {
     // instance variable with private access
-    private GUIBankATMFrame frame;
+    protected GUIBankATMFrame frame;
 
     // constructor
     public GUIBankPanel(GUIBankATMFrame frame) {

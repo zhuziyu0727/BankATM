@@ -1,18 +1,13 @@
-import javax.swing.*;
-import java.awt.*;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
 /**
  * the accounts panel inside customer panel
  */
 public class GUIBankCustomerPanelAccountsPanel extends GUIBankPanel {
     // instance variable
-    private GUIBankCustomerPanel customerPanel;
+    private GUIBankCustomerPanel_OLD customerPanel;
     private String accountNumber;
 
     // constructor
-    public GUIBankCustomerPanelAccountsPanel(GUIBankATMFrame frame, GUIBankCustomerPanel customerPanel) {
+    public GUIBankCustomerPanelAccountsPanel(GUIBankATMFrame frame, GUIBankCustomerPanel_OLD customerPanel) {
         super(frame);
         this.customerPanel = customerPanel;
         showSummary();
