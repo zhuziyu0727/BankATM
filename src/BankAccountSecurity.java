@@ -111,6 +111,10 @@ public class BankAccountSecurity extends BankAccount {
     public String[][] getMyStocks(String[][] stockList){
     //String[] column = {"STOCKID", "STOCKNAME ", "MYSTOCKCOUNTS"};
     	int n = stockList.length;
+    	if(n == 0) {
+    		String[][] data = new String[3][3]; 
+    		return data;
+    	}
     	if(stockList[0].length != 3) {
     		return stockList;
     	}else {
