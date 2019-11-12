@@ -210,7 +210,7 @@ public class Bank implements BankAccountTypes {
     
     public String[][] getCustomerMyStocksByCustomerAccountNumber(BankCustomer customer,String accountNumber) {
         //String[] column = {"STOCKID", "STOCKNAME ", "MYSTOCKCOUNTS"};
-    	return customer.getMyStocksByAccountNumber(accountNumber, stockMarket.getStockList());
+    	return customer.getMyStocksByAccountNumber(accountNumber, stockMarket.showMarket());
     }
     
     public double getAvgBoughtPriceByStockIdByCustomerAccountNumber(BankCustomer customer,String accountNumber, String stockId) {
@@ -578,6 +578,6 @@ public class Bank implements BankAccountTypes {
     	BankAccount saving = customer.getAccountByAccountNumber(bindedSavingNumber);
     	double threshHold = exchangeRate.calculate(chargeStandard.getSecurityThresholdValue(), chargeStandard.getSecurityThresholdAbbr(), saving.getCurrencyAbbr());
     	String accountNumber = generateRandomAccountNumber();
-    	return customer.checkOpenSecurityAccount(accountNumber, bindedSavingNumber, saving.getBalance(),day, month, year, threshHold);
+    	return customer.checkOpenSecurityAccount(accountNumber, bindedSavingNumber, saving.getBalance(),threshHold);
     }
 }

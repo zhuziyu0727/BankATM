@@ -314,7 +314,7 @@ public class BankCustomer extends Member implements BankAccountTypes {
         return true;
     }
     public boolean checkOpenSecurityAccount(String accountNumber, String bindedSavingNumber,
-            double savingbalance, int day, int month, int year, double threshHold) {
+            double savingbalance, double threshHold) {
     	if (!checkEligibleAccountNumber(accountNumber))
     		return false;
     	if (savingbalance < threshHold)
