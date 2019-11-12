@@ -86,8 +86,20 @@ public class Bank implements BankAccountTypes {
         return customer.getAddressZipCode();
     }
 
-    public String getCountryByCustomer(BankCustomer customer) {
-        return customer.getAddressCountry();
+    public int getNumberofAccountCheckingByCustomer(BankCustomer customer) {
+        return customer.getNumberofAccountChecking();
+    }
+    
+    public int getNumberofAccountSavingByCustomer(BankCustomer customer) {
+        return customer.getNumberofAccountSaving();
+    }
+    
+    public int getNumberofAccountLoanByCustomer(BankCustomer customer) {
+        return customer.getNumberofAccountLoan();
+    }
+    
+    public int getNumberofAccountSecurityByCustomer(BankCustomer customer) {
+        return customer.getNumberofAccountSecurity();
     }
     
     public ArrayList<String> getAllAccountNumbersByCustomer(BankCustomer customer) {
@@ -126,7 +138,43 @@ public class Bank implements BankAccountTypes {
                                                                                      String accountNumber) {
         return customer.getTransactionHistoryByAccountNumber(accountNumber);
     }
-        
+    
+    //security account functions
+    public int getNumStockHoldingByAccountNumber(BankCustomer customer,String accountNumber) {
+    	return customer.getNumStockHoldingByAccountNumber(accountNumber);
+    }
+    
+    public String[][] getStockTransactionHistoryByCustomerAccountNumber(BankCustomer customer,String accountNumber) {
+    	return customer.getStockTransactionHistoryByAccountNumber(accountNumber);
+    }
+    
+    public double getStockTotalValueByCustomerAccountNumber(BankCustomer customer,String accountNumber) {
+    	return customer.getStockTotalValueByAccountNumber(accountNumber);
+    } 
+    
+    public boolean getIsSavinghasSecurityByAccountNumber(BankCustomer customer, String accountNumber) {
+    	return customer.isSavinghasSecurityByAccountNumber(accountNumber);
+    }
+
+    public boolean isSecurityClosableByAccountNumber(BankCustomer customer, String accountNumber) {
+    	return customer.isSecurityClosable(accountNumber);
+    }
+    
+    public void sellStockByAccountNumber(BankCustomer customer, String accountNumber, String stockid, int shares) {
+    	BankAccountSecurity b = customer.getSecurityAccountByAccountNumber(accountNumber);
+    	Stock stock = stockMarket.getStockById(Integer.parseInt(stockid));
+    	//call both security account and bankMarket
+    	b.sellStock(stock, shares);
+    	stockMarket.customerSell(stock, shares);
+    }
+    
+    public void buyStockByAccountNumber(BankCustomer customer, String accountNumber, String stockid, int shares) {
+    	BankAccountSecurity b = customer.getSecurityAccountByAccountNumber(accountNumber);
+    	Stock stock = stockMarket.getStockById(Integer.parseInt(stockid));
+    	//call both security account and bankMarket
+    	b.buyStock(stock, shares); 
+    	stockMarket.customerPurchase(stock, shares);
+    }
     // primary functions
     public void increaseSaving(int day, int month, int year) {
         for (BankCustomer customer: customers) {
