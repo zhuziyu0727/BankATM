@@ -102,7 +102,20 @@ public class StockMarket {
         }
         return false;
     }
-        
+     
+    public String[][] getStockList() {
+    	String[][] data = new String[market.size()][3];
+        int count = 0;
+        for (Stock stock: market) {
+            String[] row = new String[3];
+            row[0] = Integer.toString(stock.getId());
+            row[1] = stock.getName();
+            row[2] = Integer.toString(0);
+            data[count++] = row;
+        }
+        return data;
+    }
+    
     public String[][] showMarket() {
     	String[][] data = new String[market.size()][5];
         int count = 0;
