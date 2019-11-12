@@ -9,7 +9,6 @@ import java.util.Random;
 public class Bank implements BankAccountTypes {
     // private static instance variable
     private static Bank bank_instance = null;
-
     // instance variables with private access
     private BankManager manager;
     private ArrayList<BankCustomer> customers;
@@ -148,6 +147,11 @@ public class Bank implements BankAccountTypes {
     	return customer.getNumStockHoldingByAccountNumber(accountNumber);
     }
     
+    public String[][] getCustomerMyStocksByAccountNumber(BankCustomer customer,String accountNumber) {
+        //String[] column = {"STOCKID", "STOCKNAME ", "MYSTOCKCOUNTS"};
+    	return customer.getMyStocksByAccountNumber(accountNumber, stockMarket.getStockList());
+    }
+    
     public String[][] getStockTransactionHistoryByCustomerAccountNumber(BankCustomer customer,String accountNumber) {
     	return customer.getStockTransactionHistoryByAccountNumber(accountNumber);
     }
@@ -156,7 +160,7 @@ public class Bank implements BankAccountTypes {
     	return customer.getStockTotalValueByAccountNumber(accountNumber);
     } 
     
-    public boolean getIsSavinghasSecurityByAccountNumber(BankCustomer customer, String accountNumber) {
+    public boolean isSavinghasSecurityByAccountNumber(BankCustomer customer, String accountNumber) {
     	return customer.isSavinghasSecurityByAccountNumber(accountNumber);
     }
 
@@ -164,21 +168,50 @@ public class Bank implements BankAccountTypes {
     	return customer.isSecurityClosable(accountNumber);
     }
     
-    public void sellStockByAccountNumber(BankCustomer customer, String accountNumber, String stockid, int shares) {
-    	BankAccountSecurity b = customer.getSecurityAccountByAccountNumber(accountNumber);
+    public void sellStockByAccountNumber(BankCustomer customer, String accountNumber, String stockid, int shares, int day, int month, int year) {
+    	BankAccountSecurity security = customer.getSecurityAccountByAccountNumber(accountNumber);
+    	BankAccount saving = customer.getAccountByAccountNumber(security.getBindedSavingAccountNumber().getCode());
     	Stock stock = stockMarket.getStockById(Integer.parseInt(stockid));
-    	//call both security account and bankMarket
-    	b.sellStock(stock, shares);
-    	stockMarket.customerSell(stock, shares);
+    	int avaliable = security.getStockVolumeByStockId(stock.getId());
+    	double stockValue = exchangeRate.calculate(shares * stock.getSellPriceAmount(), "USD", saving.getCurrencyAbbr());
+    	if(avaliable < shares) {
+    		throw new IllegalArgumentException("Don't have enough stock shares to make this sell.");
+    	}else {
+    		saving.addBalance(stockValue);
+        	//call both security account and bankMarket
+    		security.sellStock(stock, shares, day, month, year);
+    		stockMarket.customerSell(stock, shares);
+    	}
     }
     
-    public void buyStockByAccountNumber(BankCustomer customer, String accountNumber, String stockid, int shares) {
-    	BankAccountSecurity b = customer.getSecurityAccountByAccountNumber(accountNumber);
+    public void buyStockByAccountNumber(BankCustomer customer, String accountNumber, String stockid, int shares, int day, int month, int year) {
+    	BankAccountSecurity security = customer.getSecurityAccountByAccountNumber(accountNumber);
+    	BankAccount saving = customer.getAccountByAccountNumber(security.getBindedSavingAccountNumber().getCode());
     	Stock stock = stockMarket.getStockById(Integer.parseInt(stockid));
-    	//call both security account and bankMarket
-    	b.buyStock(stock, shares); 
-    	stockMarket.customerPurchase(stock, shares);
+    	double balance = saving.getBalance();
+    	double stockValue = exchangeRate.calculate(shares * stock.getBuyPriceAmount(), "USD", saving.getCurrencyAbbr());
+        if (balance < stockValue)
+            throw new IllegalArgumentException("Don't have enough money to make this buy.");
+        else {
+        	saving.deductBalance(stockValue);
+        	//call both security account and bankMarket
+        	security.buyStock(stock, shares, day, month, year); 
+        	stockMarket.customerPurchase(stock, shares);
+        }
     }
+    
+    public String openSecurityAccount(BankCustomer customer, String bindedSavingNumber, int day, int month, int year) {
+    	BankAccount saving = customer.getAccountByAccountNumber(bindedSavingNumber);
+    	double threshHold = exchangeRate.calculate(chargeStandard.getSecurityThresholdValue(), chargeStandard.getSecurityThresholdAbbr(), saving.getCurrencyAbbr());
+    	String accountNumber = generateRandomAccountNumber();
+    	customer.openSecurityAccount(accountNumber, bindedSavingNumber, saving.getBalance(),day, month, year, threshHold);
+    	return accountNumber;
+    }
+    
+    public void closeSecurityAccount(BankCustomer customer, String accountNumber) {
+        customer.closeSecurityAccount(accountNumber);
+    }
+    
     // primary functions
     public void increaseSaving(int day, int month, int year) {
         for (BankCustomer customer: customers) {
