@@ -83,8 +83,8 @@ public interface DataOperation {
 				numCustomer = 0, numAccount = 0, numTransaction = 0, numStock = 0;
 		Bank bank = Bank.getInstance();
 		ArrayList<BankCustomer> customers = bank.getCustomers();
-		ArrayList<Stock> market = bank.getStockMarket().saveData();
-
+		//ArrayList<Stock> market = bank.getStockMarket().saveData();
+		ArrayList<Stock> newMarket = new ArrayList<Stock>();
 		Class.forName("org.sqlite.JDBC");
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:db/test.db");
 		Statement stmt = conn.createStatement();
@@ -122,11 +122,16 @@ public interface DataOperation {
 					stockTable[i][4] = String.valueOf(rs.getDouble("buyPrice"));
 					stockTable[i][5] = String.valueOf(rs.getDouble("sellPrice"));
 				}
-				market.get(i).setAvailableNumber(Integer.parseInt(stockTable[i][3]));
-				market.get(i).setBuyPriceAmount(Double.parseDouble(stockTable[i][4]));
-				market.get(i).setSellPriceAmount(Double.parseDouble(stockTable[i][5]));
+				//System.out.println(market.size());
+				//System.out.println(i);
+				Stock stock = new Stock(Integer.parseInt(stockTable[i][0]), stockTable[i][1], Integer.parseInt(stockTable[i][2]));
+				stock.setAvailableNumber(Integer.parseInt(stockTable[i][3]));
+				stock.setBuyPriceAmount(Double.parseDouble(stockTable[i][4]));
+				stock.setSellPriceAmount(Double.parseDouble(stockTable[i][5]));
+				newMarket.add(stock);
 			}
 		}
+		bank.getStockMarket().setMarket(newMarket);
 		rs = stmt.executeQuery("SELECT * FROM customer");
 		for (int i = 0; i < numCustomer; i++) {
 			if (rs.next()) {
