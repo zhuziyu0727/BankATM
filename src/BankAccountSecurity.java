@@ -26,7 +26,7 @@ public class BankAccountSecurity extends BankAccount {
 	public ArrayList<Stock> getStockHolding(){
 		return this.stockHolding;
 	}
-	
+		
 	public int getNumStockTransaction() {
 		return this.stockTransactions.getStockHistory().size();
 	}
@@ -39,6 +39,14 @@ public class BankAccountSecurity extends BankAccount {
 		return this.stockHolding.size();
 	}
 	
+	public double getTotalStockValue() {
+		updateStockBalance();
+		return this.getBalance();
+	}
+	
+	public String[][] getStockTransactionHistory() {
+		return stockTransactions.getData();
+	}
 	//mutator functions
 	public void setBindedSavingAccountNumber(String BindedSavingAccountNumber) {
 		this.bindedSavingAccountNumber.setCode(BindedSavingAccountNumber);
@@ -118,5 +126,13 @@ public class BankAccountSecurity extends BankAccount {
 				amount += stockinHand.getBuyPriceAmount();
 		}
 		return amount;
+	}
+	
+	public void updateStockBalance() {
+		double amount = 0;
+		for(Stock stockinHand : stockHolding) {
+				amount += stockinHand.getBuyPriceAmount();
+		}
+		this.setBalance(amount);
 	}
 }

@@ -102,7 +102,7 @@ public class StockMarket {
         }
         return false;
     }
-    
+        
     public String[][] showMarket() {
     	String[][] data = new String[market.size()][5];
         int count = 0;
