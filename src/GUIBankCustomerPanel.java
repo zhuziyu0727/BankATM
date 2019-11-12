@@ -81,6 +81,15 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
     private JLabel closeNotice;
     private JLabel close;
 
+    private JLabel accountTypeLabel;
+    private JComboBox accountTypes;
+    private JLabel currencyTypeLabel;
+    private JComboBox currencyTypes;
+    private JLabel valueLabel;
+    private JTextField valueText;
+    // warning;
+    private JButton open;
+
     private JScrollPane history;
     private JTextField depositValue;
     private JButton deposit;
@@ -397,7 +406,9 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
 
         displayAccountsNoAccount();
 
-        if (allAccounts.size() != 0) {
+        if (tab.equals("OpenAccount")) {
+            openAccount();
+        } else if (allAccounts.size() != 0) {
             displayAccountsHasAccount();
 
             if (tab.equals("Overview")) {
@@ -423,6 +434,12 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         openNewAccount.setBounds (580, 65, 155, 25);
 
         // openNewAccount
+        openNewAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                displayAccounts("OpenAccount", "");
+            }
+        });
     }
 
     public void displayAccountsHasAccount() {
@@ -492,6 +509,66 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         } else {
             accountSecurity.setForeground(Color.GRAY);
         }
+    }
+
+    public void openAccount() {
+        accountTypeLabel = new JLabel("Account Type");
+        accountTypes = new JComboBox();
+        currencyTypeLabel = new JLabel("Currency Type");
+        currencyTypes = new JComboBox();
+        valueLabel = new JLabel("Value");
+        valueText = new JTextField();
+        warning = new JLabel();
+        open = new JButton("OPEN");
+
+        add(accountTypeLabel);
+        add(accountTypes);
+        add(currencyTypeLabel);
+        add(currencyTypes);
+        add(valueLabel);
+        add(valueText);
+        add(warning);
+        add(open);
+
+        accountTypeLabel.setBounds (295, 190, 200, 30);
+        accountTypes.setBounds (295, 220, 200, 25);
+        currencyTypeLabel.setBounds (295, 245, 200, 25);
+        currencyTypes.setBounds (295, 270, 200, 25);
+        valueLabel.setBounds (295, 295, 200, 25);
+        valueText.setBounds (295, 320, 200, 25);
+        warning.setBounds (295, 370, 200, 25);
+        open.setBounds (345, 420, 100, 25);
+
+        accountTypes.addItem(BankAccountTypes.CHECKING);
+        accountTypes.addItem(BankAccountTypes.SAVING);
+        accountTypes.addItem(BankAccountTypes.LOAN);
+
+        currencyTypes.addItem(CurrencyAbbrs.CurrencyCNY);
+        currencyTypes.addItem(CurrencyAbbrs.CurrencyEUR);
+        currencyTypes.addItem(CurrencyAbbrs.CurrencyUSD);
+
+        open.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    double value = Double.parseDouble(valueText.getText());
+                    String accountType = (String) accountTypes.getSelectedItem();
+                    String currencyType = (String) currencyTypes.getSelectedItem();
+                    LocalDateTime now = LocalDateTime.now();
+                    int day = now.getDayOfMonth();
+                    int month = now.getMonthValue();
+                    int year = now.getYear();
+                    String accountNumber = bank.openAccount(customer, accountType, currencyType, value, day, month, year);
+                    String routingNumber = frame.getRoutingNumber();
+                    bank.setRoutingNumberByCustomerAccountNumber(customer, accountNumber, routingNumber);
+                    warning.setForeground(Color.GREEN);
+                    warning.setText("Success");
+                } catch (Exception exception) {
+                    warning.setForeground(Color.RED);
+                    warning.setText(exception.getMessage());
+                }
+            }
+        });
     }
 
     public void displayAccountsOverview() {
