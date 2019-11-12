@@ -152,6 +152,8 @@ public class GUIBankManagerPanel extends GUIBankPanel {
                 customerUserName = (String) customersList.getSelectedItem();
             }
             customersList.setSelectedItem(customerUserName);
+
+
         }
     }
 
@@ -200,6 +202,11 @@ public class GUIBankManagerPanel extends GUIBankPanel {
         add(marketList);
 
         marketList.setBounds (175, 145, 520, 425);
+
+        String[] column = {"ID", "NAME", "AVAILABLE", "BUYPRICE", "SELLPRICE"};
+        String[][] data = bank.getShowMarket();
+        JTable transactionsTable = new JTable(data, column);
+        marketList.getViewport().add(transactionsTable);
     }
 
     public void stockChangePrice() {

@@ -35,6 +35,14 @@ public class Bank implements BankAccountTypes {
     public StockMarket getStockMarket() {
     	return stockMarket;
     }
+
+    public String[][] getShowMarket() {
+        return stockMarket.showMarket();
+    }
+
+    public Stock getStockById(int id) {
+        return stockMarket.getStockById(id);
+    }
     
     public ArrayList<BankCustomer> getCustomers() {
         return customers;

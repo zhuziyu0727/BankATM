@@ -887,6 +887,10 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         marketList.setBounds (290, 155, 445, 405);
 
         // add market content
+        String[] column = {"ID", "NAME", "AVAILABLE", "BUYPRICE", "SELLPRICE"};
+        String[][] data = bank.getShowMarket();
+        JTable transactionsTable = new JTable(data, column);
+        marketList.getViewport().add(transactionsTable);
     }
 
     public void displaySecurityMyStock() {
