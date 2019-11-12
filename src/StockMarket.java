@@ -14,12 +14,14 @@ public class StockMarket {
     private StockMarket() {
         market = new ArrayList<>();
         //by default, we create 6 stocks
+        /*
         market.add(new Stock(1020,"Boston University",500));
         market.add(new Stock(1021,"Harvard University",500));
         market.add(new Stock(1022,"Massachusetts Institute of Technology",600));
         market.add(new Stock(1023,"Boston College",600));
         market.add(new Stock(1024,"Tufts University",700));
         market.add(new Stock(1025,"Brandeis University",700));
+        */
     }
     
     private StockMarket(ArrayList<Stock> stock) {
