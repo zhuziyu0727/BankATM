@@ -81,11 +81,12 @@ public class BankAccountSecurity extends BankAccount {
 		Collections.sort(stockHolding, new StockComparator());
 	}
 	
-	public double getAvgBoughtPriceByStock (Stock stock) {
-		if(getStockVolumeByStockId(stock.getId()) == 0) {
+	public double getAvgBoughtPriceByStock (String stockId) {
+		int stockid = Integer.parseInt(stockId);
+		if(getStockVolumeByStockId(stockid) == 0) {
 			return 0;
 		}else {
-			return getStockAmountByStock(stock) / getStockVolumeByStockId(stock.getId());
+			return getStockAmountByStockId(stockid) / getStockVolumeByStockId(stockid);
 		}
 	}
 	
@@ -135,10 +136,10 @@ public class BankAccountSecurity extends BankAccount {
 		return volume;
 	}
 	
-	public double getStockAmountByStock(Stock stock) {
+	public double getStockAmountByStockId(int stockid) {
 		double amount = 0;
 		for(Stock stockinHand : stockHolding) {
-			if(stockinHand.getId() == stock.getId())
+			if(stockinHand.getId() == stockid)
 				amount += stockinHand.getBuyPriceAmount();
 		}
 		return amount;

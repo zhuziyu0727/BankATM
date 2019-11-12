@@ -145,6 +145,10 @@ public class BankCustomer extends Member implements BankAccountTypes {
         return b.getTotalStockValue();
     }
     
+    public double getAvgBoughtPriceByStockIdByAccount(String accountNumber, String stockId) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+    	return b.getAvgBoughtPriceByStock(stockId);
+    }
     public String[][] getStockTransactionHistoryByAccountNumber(String accountNumber) {
         BankAccountSecurity bankAccount = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
         return bankAccount.getStockTransactionHistory();
@@ -168,6 +172,7 @@ public class BankCustomer extends Member implements BankAccountTypes {
 		BankAccountSecurity security = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
 		return security.isClosable();
 	}
+	
     // mutator function
     public void setCustomerNumber(String number) {
         checkCustomerNumber(number);

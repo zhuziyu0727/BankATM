@@ -147,11 +147,14 @@ public class Bank implements BankAccountTypes {
     	return customer.getNumStockHoldingByAccountNumber(accountNumber);
     }
     
-    public String[][] getCustomerMyStocksByAccountNumber(BankCustomer customer,String accountNumber) {
+    public String[][] getCustomerMyStocksByCustomerAccountNumber(BankCustomer customer,String accountNumber) {
         //String[] column = {"STOCKID", "STOCKNAME ", "MYSTOCKCOUNTS"};
     	return customer.getMyStocksByAccountNumber(accountNumber, stockMarket.getStockList());
     }
     
+    public double getAvgBoughtPriceByStockIdByCustomerAccountNumber(BankCustomer customer,String accountNumber, String stockId) {
+    	return customer.getAvgBoughtPriceByStockIdByAccount(accountNumber, stockId);
+    }
     public String[][] getStockTransactionHistoryByCustomerAccountNumber(BankCustomer customer,String accountNumber) {
     	return customer.getStockTransactionHistoryByAccountNumber(accountNumber);
     }
