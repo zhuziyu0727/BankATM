@@ -1,4 +1,4 @@
-**<p align=center><sub>Team 11: Dezhou Wang(U46937632), Ziyu Zhu(U43977497), Kaiyuan Fan(U61521997) </sub></p>**
+**<p align=center><sub>Team 11: Dezhou Wang(U46937632), Ziyu Zhu(U43977497), Kaiyuan Fan(U61521997), Yicheng Li(U29503597) </sub></p>**
 
 **Class Design**
 
