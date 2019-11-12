@@ -137,6 +137,11 @@ public class BankCustomer extends Member implements BankAccountTypes {
     	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
         return b;
     }
+  
+    public int getstockCountsByStockId(String accountNumber, String stockid) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+        return b.getStockVolumeByStockId(Integer.parseInt(stockid));
+    }
     
     public int getNumStockHoldingByAccountNumber(String accountNumber) {
     	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
