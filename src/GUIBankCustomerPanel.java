@@ -818,7 +818,7 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
             } else if (tab.equals("History")) {
                 displaySecurityHistory();
             }
-        } else if (true) { // able to open an account
+        } else if (bank.checkOpenSecurityAccount(customer, accountNumber)) { // able to open an account
             displaySecurityEligible();
         } else { // unable to open an account
             displaySecurityNotEligible();
@@ -963,10 +963,10 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         accountNumberText.setText(accountNumber);
 
         dateOpenText.setEditable(false);
-        dateOpenText.setText("..");  // getText
+        String securityAccountNumber = bank.getSecurityAccountNumberBySavingAccountNumber(customer, accountNumber);
+        dateOpenText.setText(bank.getOpenDateByCustomerAccountNumber(customer, securityAccountNumber));  // getText
 
         stocksNumberText.setEditable(false);
-        String securityAccountNumber = bank.getSecurityAccountNumberBySavingAccountNumber(customer, accountNumber);
         stocksNumberText.setText(Integer.toString(bank.getNumStockHoldingByAccountNumber(customer, securityAccountNumber))); // get stocks number
 
         stocksValueText.setEditable(false);
