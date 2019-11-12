@@ -83,7 +83,7 @@ public class Bank implements BankAccountTypes {
         Stock stock = new Stock(id, name, num);
         stockMarket.addStock(stock);
         stockMarket.modifyStockBuyPrice(stock, buy);
-        stockMarket.modifyStockBuyPrice(stock, sell);
+        stockMarket.modifyStockSellPrice(stock, sell);
     }
 
     public void deleteStock(int id) {
@@ -199,7 +199,11 @@ public class Bank implements BankAccountTypes {
         return customer.getTransactionHistoryByAccountNumber(accountNumber);
     }
     
-    //security account functions
+    //security account functions    
+    public String getSecurityAccountNumberBySavingAccountNumber(BankCustomer customer,String accountNumber) {
+    	return customer.getSecurityAccountBySavingAccountNumber(accountNumber);
+    }
+    
     public int getNumStockHoldingByAccountNumber(BankCustomer customer,String accountNumber) {
     	return customer.getNumStockHoldingByAccountNumber(accountNumber);
     }

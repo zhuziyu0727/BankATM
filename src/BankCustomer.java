@@ -40,8 +40,11 @@ public class BankCustomer extends Member implements BankAccountTypes {
 
     public ArrayList<String> getAllAccountNumbers() {
         ArrayList<String> allAccountNumbers = new ArrayList<>();
-        for (BankAccount bankAccount: accounts)
-            allAccountNumbers.add(bankAccount.getAccountNumber());
+        for (BankAccount bankAccount: accounts) {
+            if (!bankAccount.getType().equals(SECURITY)) {
+                allAccountNumbers.add(bankAccount.getAccountNumber());
+            }
+        }
         return allAccountNumbers;
     }
 
@@ -166,6 +169,15 @@ public class BankCustomer extends Member implements BankAccountTypes {
             	if(security.getBindedSavingAccountNumber().getCode() == accountNumber) return true;
             }
         return false;
+    }
+    
+    public String getSecurityAccountBySavingAccountNumber(String savingAccountNumber) {
+        for (BankAccount b: accounts)
+            if (b.getType() == "Security") {
+            	BankAccountSecurity securityAccount = (BankAccountSecurity) getAccountByAccountNumber(b.getAccountNumber());
+            	if(securityAccount.getBindedSavingAccountNumber().getCode() == savingAccountNumber) return securityAccount.getAccountNumber();
+            }
+        return "";
     }
     
 	public boolean isSecurityClosable(String accountNumber) {
