@@ -85,7 +85,11 @@ public class Bank implements BankAccountTypes {
     public String getZipCodeByCustomer(BankCustomer customer) {
         return customer.getAddressZipCode();
     }
-
+    
+    public String getCountryByCustomer(BankCustomer customer) {
+        return customer.getAddressCountry();
+    }
+    
     public int getNumberofAccountCheckingByCustomer(BankCustomer customer) {
         return customer.getNumberofAccountChecking();
     }
