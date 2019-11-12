@@ -43,11 +43,12 @@ public interface DataOperation {
 					+ (customer.getNumOfAccount() - customer.getNumOfSecurityAccount()) + "')");
 		}
 		stmt.executeUpdate(
-				"CREATE TABLE account(routingNumber TEXT, accountNumber TEXT, MoneyAmount DOUBLE, currencyType TEXT, OpenDay INT, OpenMonth INT, OpenYear INT, lastUpdateDay INT, lastUpdateMonth INT, lastUpdateYear INT, type TEXT, NumTransaction INT)");
+				"CREATE TABLE account(routingNumber TEXT, accountNumber TEXT, MoneyAmount DOUBLE, currencyType TEXT, OpenDay INT, OpenMonth INT, OpenYear INT, lastUpdateDay INT, lastUpdateMonth INT, lastUpdateYear INT, type TEXT, NumTransaction INT, bindedSecurityAccountNumber TEXT)");
 		for (BankCustomer customer : customers) {
 			for (BankAccount account : customer.getAccounts()) {
 				if (!account.getType().equals(BankAccountTypes.SECURITY)) {
-					stmt.executeUpdate("INSERT INTO account VALUES( '" + account.getRoutingNumber() + "' , '"
+					if(!account.getType().equals(BankAccountTypes.SAVING)) {
+					stmt.executeUpdate("INSERT INTO account (routingNumber,accountNumber,MoneyAmount,currencyType,OpenDay, OpenMonth, OpenYear, lastUpdateDay, lastUpdateMonth, lastUpdateYear, type, NumTransaction) VALUES( '" + account.getRoutingNumber() + "' , '"
 							+ account.getAccountNumber() + "', '" + account.getBalance() + "', '"
 							+ account.getCurrencyType() + "', '" + account.getOpenDateObject().getDay() + "', '"
 							+ account.getOpenDateObject().getMonth() + "', '" + account.getOpenDateObject().getYear()
@@ -55,6 +56,17 @@ public interface DataOperation {
 							+ account.getLastUpdateDateObject().getMonth() + "' , '"
 							+ account.getLastUpdateDateObject().getYear() + "','" + account.getType() + "', '"
 							+ account.getNumTransaction() + "')");
+					}
+					else {
+						stmt.executeUpdate("INSERT INTO account VALUES( '" + account.getRoutingNumber() + "' , '"
+								+ account.getAccountNumber() + "', '" + account.getBalance() + "', '"
+								+ account.getCurrencyType() + "', '" + account.getOpenDateObject().getDay() + "', '"
+								+ account.getOpenDateObject().getMonth() + "', '" + account.getOpenDateObject().getYear()
+								+ "', '" + account.getLastUpdateDateObject().getDay() + "' , '"
+								+ account.getLastUpdateDateObject().getMonth() + "' , '"
+								+ account.getLastUpdateDateObject().getYear() + "','" + account.getType() + "', '"
+								+ account.getNumTransaction() + "', '" + ((BankAccountSaving) account).getBindedSecurityAccountNumber() + "')");
+					}
 				}
 			}
 		}
@@ -79,12 +91,12 @@ public interface DataOperation {
 	}
 
 	public static void sqliteRead() throws Exception {
-		int stockAttribute = 6, customerAttribute = 18, accountAttribute = 12, transactionAttribute = 8,
+		int stockAttribute = 6, customerAttribute = 18, accountAttribute = 13, transactionAttribute = 8,
 				numCustomer = 0, numAccount = 0, numTransaction = 0, numStock = 0;
 		Bank bank = Bank.getInstance();
 		ArrayList<BankCustomer> customers = bank.getCustomers();
-		ArrayList<Stock> market = bank.getStockMarket().saveData();
-
+		//ArrayList<Stock> market = bank.getStockMarket().saveData();
+		ArrayList<Stock> newMarket = new ArrayList<Stock>();
 		Class.forName("org.sqlite.JDBC");
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:db/test.db");
 		Statement stmt = conn.createStatement();
@@ -122,11 +134,16 @@ public interface DataOperation {
 					stockTable[i][4] = String.valueOf(rs.getDouble("buyPrice"));
 					stockTable[i][5] = String.valueOf(rs.getDouble("sellPrice"));
 				}
-				market.get(i).setAvailableNumber(Integer.parseInt(stockTable[i][3]));
-				market.get(i).setBuyPriceAmount(Double.parseDouble(stockTable[i][4]));
-				market.get(i).setSellPriceAmount(Double.parseDouble(stockTable[i][5]));
+				//System.out.println(market.size());
+				//System.out.println(i);
+				Stock stock = new Stock(Integer.parseInt(stockTable[i][0]), stockTable[i][1], Integer.parseInt(stockTable[i][2]));
+				stock.setAvailableNumber(Integer.parseInt(stockTable[i][3]));
+				stock.setBuyPriceAmount(Double.parseDouble(stockTable[i][4]));
+				stock.setSellPriceAmount(Double.parseDouble(stockTable[i][5]));
+				newMarket.add(stock);
 			}
 		}
+		bank.getStockMarket().setMarket(newMarket);
 		rs = stmt.executeQuery("SELECT * FROM customer");
 		for (int i = 0; i < numCustomer; i++) {
 			if (rs.next()) {
@@ -165,6 +182,7 @@ public interface DataOperation {
 				accountTable[i][9] = String.valueOf(rs.getInt("lastUpdateYear"));
 				accountTable[i][10] = (rs.getString("type"));
 				accountTable[i][11] = String.valueOf(rs.getInt("NumTransaction"));
+				accountTable[i][12] = rs.getString("bindedSecurityAccountNumber");
 			}
 		}
 		rs = stmt.executeQuery("SELECT * FROM transactions");
