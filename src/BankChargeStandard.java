@@ -13,6 +13,7 @@ public class BankChargeStandard implements CurrencyAbbrs {
     private double loanInterestRate;
     private Money loanInterestLine;
     private double loanInterestRateDefault;
+    private Money securityThreshold;
 
     // constructor
     public BankChargeStandard() {
@@ -31,6 +32,7 @@ public class BankChargeStandard implements CurrencyAbbrs {
         loanInterestRate = 0.08;
         loanInterestLine = new Money(CurrencyUSD, 2000);
         loanInterestRateDefault = 0.04;
+        securityThreshold = new Money(CurrencyUSD, 5000);
     }
 
     // primary function
@@ -80,6 +82,14 @@ public class BankChargeStandard implements CurrencyAbbrs {
 
     public double getLoanInterestRate() {
         return loanInterestRate;
+    }
+    
+    public double getSecurityThresholdValue() {
+        return securityThreshold.getAmount();
+    }
+    
+    public String getSecurityThresholdAbbr() {
+        return securityThreshold.getCurrencyAbbr();
     }
 
 }
