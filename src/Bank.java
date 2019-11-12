@@ -574,7 +574,7 @@ public class Bank implements BankAccountTypes {
         }
         return true;
     }
-    public boolean checkOpenSecurityAccount(BankCustomer customer, String bindedSavingNumber, int day, int month, int year) {
+    public boolean checkOpenSecurityAccount(BankCustomer customer, String bindedSavingNumber) {
     	BankAccount saving = customer.getAccountByAccountNumber(bindedSavingNumber);
     	double threshHold = exchangeRate.calculate(chargeStandard.getSecurityThresholdValue(), chargeStandard.getSecurityThresholdAbbr(), saving.getCurrencyAbbr());
     	String accountNumber = generateRandomAccountNumber();

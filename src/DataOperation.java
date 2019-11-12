@@ -233,6 +233,9 @@ public interface DataOperation {
 					account.setLastUpdateDate(Integer.parseInt(accountTable[rowAccount][7]),
 							Integer.parseInt(accountTable[rowAccount][8]),
 							Integer.parseInt(accountTable[rowAccount][9]));
+					if(account.getType().equals(BankAccountTypes.SAVING)) {
+						((BankAccountSaving) account).setBindedSecurityAccountNumber(accountTable[i][12]);
+					}
 					for (int q = 0; q < Integer.parseInt(accountTable[rowAccount][11]); q++) {
 						if (rowTransaction < numTransaction) {
 							BankTransaction transaction = new BankTransaction();
