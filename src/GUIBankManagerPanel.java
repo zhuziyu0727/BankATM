@@ -132,6 +132,13 @@ public class GUIBankManagerPanel extends GUIBankPanel {
                 stockMarket();
             }
         });
+
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                frame.showLogin();
+            }
+        });
     }
 
     public void displayHistory() {
