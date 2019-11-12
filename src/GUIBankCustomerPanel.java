@@ -75,6 +75,8 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
     private JTextField dateLastText;
     private JLabel typeLabel;
     private JTextField typeText;
+    private JLabel currencyLabel;
+    private JTextField currencyText;
     // warning
     private JLabel closeNotice;
     private JLabel close;
@@ -91,8 +93,8 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
     private JTextField toText;
     private JLabel amountLabel;
     private JTextField amountText;
-    private JLabel currencyLabel;
-    private JTextField currencyText;
+    // currencyLabel;
+    // currencyText;
     // warning
     private JButton transfer;
 
@@ -505,6 +507,8 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         typeText = new JTextField();
         deposit = new JButton("DEPOSIT");
         withdraw = new JButton("WITHDRAW");
+        currencyLabel = new JLabel("Currency");
+        currencyText = new JTextField();
         warning = new JLabel();
         closeNotice = new JLabel("Want to close this account?");
         close = new JLabel("CLOSE");
@@ -519,6 +523,8 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         add(dateLastText);
         add(typeLabel);
         add(typeText);
+        add(currencyLabel);
+        add(currencyText);
         add(warning);
         add(closeNotice);
         add(close);
@@ -533,6 +539,8 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
         dateLastText.setBounds (155, 320, 305, 25);
         typeLabel.setBounds (155, 345, 305, 25);
         typeText.setBounds (155, 370, 305, 25);
+        currencyLabel.setBounds(155, 395, 305, 25);
+        currencyText.setBounds(155, 420, 305, 25);
         warning.setBounds (155, 510, 580, 25);
         closeNotice.setBounds (155, 545, 180, 25);
         close.setBounds (340, 545, 55, 25);
@@ -551,6 +559,9 @@ public class GUIBankCustomerPanel extends GUIBankPanel {
 
         typeText.setEditable(false);
         typeText.setText(bank.getAccountTypeByCustomerAccountNumber(customer, accountNumber));
+
+        currencyText.setEditable(false);
+        currencyText.setText(bank.getAccountCurrencyAbbrByCustomerAccountNumber(customer, accountNumber));
 
         close.setForeground(Color.BLUE);
         close.addMouseListener(new MouseListener() {

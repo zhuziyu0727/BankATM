@@ -43,6 +43,55 @@ public class Bank implements BankAccountTypes {
     public Stock getStockById(int id) {
         return stockMarket.getStockById(id);
     }
+
+    public ArrayList<Stock> getAllStocks() {
+        return stockMarket.saveData();
+    }
+
+    public int getIdByStock(Stock stock) {
+        return stock.getId();
+    }
+
+    public String getNameByStock(Stock stock) {
+        return stock.getName();
+    }
+
+    public double getBuyPriceByStock(Stock stock) {
+        return stock.getBuyPriceAmount();
+    }
+
+    public double getSellPriceByStock(Stock stock) {
+        return stock.getSellPriceAmount();
+    }
+
+    public int getNumOwnedByCustomers(Stock stock) {
+        return stock.getTotalNumber() - stock.getAvailableNumber();
+    }
+
+    public int getNumAvailable(Stock stock) {
+        return stock.getAvailableNumber();
+    }
+
+    public boolean modifyStockBuyPrice(Stock stock, double newPrice) {
+        return stockMarket.modifyStockBuyPrice(stock, newPrice);
+    }
+
+    public boolean modifyStockSellPrice(Stock stock, double newPrice) {
+        return stockMarket.modifyStockSellPrice(stock, newPrice);
+    }
+
+    public void addStock(int id, String name, int num, double buy, double sell) {
+        Stock stock = new Stock(id, name, num);
+        stockMarket.addStock(stock);
+        stockMarket.modifyStockBuyPrice(stock, buy);
+        stockMarket.modifyStockBuyPrice(stock, sell);
+    }
+
+    public void deleteStock(int id) {
+        if (!stockMarket.deleteStock(id)) {
+            throw new IllegalStateException("Failed to delete!");
+        }
+    }
     
     public ArrayList<BankCustomer> getCustomers() {
         return customers;
