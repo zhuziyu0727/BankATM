@@ -52,7 +52,43 @@ public class BankCustomer extends Member implements BankAccountTypes {
         String alert = String.format("\"%s\" is not found in this customer.", accountNumber);
         throw new IllegalArgumentException(alert);
     }
-
+    
+    public int getNumberofAccountChecking() {
+    	int count = 0;
+        for (BankAccount b: accounts)
+            if (b.getType() == "Checking") {
+            	count ++;
+            }
+        return count;
+    }
+    
+    public int getNumberofAccountSaving() {
+    	int count = 0;
+        for (BankAccount b: accounts)
+            if (b.getType() == "Saving") {
+            	count ++;
+            }
+        return count;
+    }
+    
+    public int getNumberofAccountLoan() {
+    	int count = 0;
+        for (BankAccount b: accounts)
+            if (b.getType() == "Loan") {
+            	count ++;
+            }
+        return count;
+    }
+    
+    public int getNumberofAccountSecurity() {
+    	int count = 0;
+        for (BankAccount b: accounts)
+            if (b.getType() == "Security") {
+            	count ++;
+            }
+        return count;
+    }
+    
     public String getRoutingNumberByAccountNumber(String accountNumber) {
         BankAccount bankAccount = getAccountByAccountNumber(accountNumber);
         return bankAccount.getRoutingNumber();
@@ -67,7 +103,7 @@ public class BankCustomer extends Member implements BankAccountTypes {
         BankAccount b = getAccountByAccountNumber(accountNumber);
         return b.getCurrencyAbbr();
     }
-
+ 
     public String getAccountTypeByAccountNumber(String accountNumber) {
         BankAccount b = getAccountByAccountNumber(accountNumber);
         return b.getType();
@@ -77,7 +113,7 @@ public class BankCustomer extends Member implements BankAccountTypes {
         BankAccount b = getAccountByAccountNumber(accountNumber);
         return b.getBalance();
     }
-
+    
     public String getOpenDateByAccountNumber(String accountNumber) {
         BankAccount bankAccount = getAccountByAccountNumber(accountNumber);
         return bankAccount.getOpenDate();
@@ -92,7 +128,51 @@ public class BankCustomer extends Member implements BankAccountTypes {
         BankAccount bankAccount = getAccountByAccountNumber(accountNumber);
         return bankAccount.getTransactionHistory();
     }
-
+    //security account functions
+    
+    public BankAccountSecurity getSecurityAccountByAccountNumber(String accountNumber) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+        return b;
+    }
+    
+    public int getNumStockHoldingByAccountNumber(String accountNumber) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+        return b.getNumStockHolding();
+    }
+    
+    public double getStockTotalValueByAccountNumber(String accountNumber) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+        return b.getTotalStockValue();
+    }
+    
+    public double getAvgBoughtPriceByStockIdByAccount(String accountNumber, String stockId) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+    	return b.getAvgBoughtPriceByStock(stockId);
+    }
+    public String[][] getStockTransactionHistoryByAccountNumber(String accountNumber) {
+        BankAccountSecurity bankAccount = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+        return bankAccount.getStockTransactionHistory();
+    }
+    
+    public String[][] getMyStocksByAccountNumber(String accountNumber, String[][] stockList){
+    	BankAccountSecurity bankAccount = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+    	return bankAccount.getMyStocks(stockList);
+    }
+    
+    public boolean isSavinghasSecurityByAccountNumber(String accountNumber) {
+        for (BankAccount b: accounts)
+            if (b.getType() == "Security") {
+            	BankAccountSecurity security = (BankAccountSecurity) getAccountByAccountNumber(b.getAccountNumber());
+            	if(security.getBindedSavingAccountNumber().getCode() == accountNumber) return true;
+            }
+        return false;
+    }
+    
+	public boolean isSecurityClosable(String accountNumber) {
+		BankAccountSecurity security = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+		return security.isClosable();
+	}
+	
     // mutator function
     public void setCustomerNumber(String number) {
         checkCustomerNumber(number);
@@ -136,6 +216,26 @@ public class BankCustomer extends Member implements BankAccountTypes {
         accounts.add(bankAccount);
     }
 
+    public void openSecurityAccount(String accountNumber, String bindedSavingNumber,
+            double savingbalance, int day, int month, int year, double threshHold) {
+    	if (!checkEligibleAccountNumber(accountNumber))
+    		throw new IllegalArgumentException("account number is duplicate.");
+    	if (savingbalance < threshHold)
+    		throw new IllegalArgumentException("Saving balance is not enough to open an security account.");
+    	BankAccount bankAccountSecurity = new BankAccountSecurity(new BankNumberAccount(bindedSavingNumber));
+    	//doesn't charge fee
+    	bankAccountSecurity.open(day, month, year);
+    	bankAccountSecurity.setAccountNumber(accountNumber);
+		accounts.add(bankAccountSecurity);
+    }
+    
+    public void closeSecurityAccount(String accountNumber) {
+    	BankAccountSecurity b = (BankAccountSecurity)getAccountByAccountNumber(accountNumber);
+        if (!b.isClosable())
+            throw new IllegalArgumentException("There exist stocks in security account.");
+        accounts.remove(b);
+    }
+    
     public void depositToAccount(String accountNumber, double value, int day, int month, int year, double fee) {
         BankAccount b = getAccountByAccountNumber(accountNumber);
         double balance = b.getBalance();

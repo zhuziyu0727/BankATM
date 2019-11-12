@@ -57,7 +57,7 @@ public class StockMarket {
     }
     
     //When the manager wants to modify the number of a stock
-    public boolean modifyStock(Stock stock, int number) {
+    public boolean modifyStockNumber(Stock stock, int number) {
     	for (Stock stck: market) {
             if (stck.isEqual(stock)) {
             	stck.addNumber(number);
@@ -66,7 +66,71 @@ public class StockMarket {
         }
         return false;
     }
-
+    //When the manager wants to modify the price of a stock
+    public boolean modifyStockBuyPrice(Stock stock, double price) {
+    	try {
+    		if (price <= 0) {
+    			throw new Exception();
+    		}
+    	} catch (Exception e) {
+    		String alert = String.format("The price cannot small than or equal to 0.");
+            throw new IllegalArgumentException(alert);
+    	}
+    	for (Stock stck: market) {
+    		if (stck.isEqual(stock)) {
+            	stck.setBuyPriceAmount(price);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean modifyStockSellPrice(Stock stock, double price) {
+    	try {
+    		if (price <= 0) {
+    			throw new Exception();
+    		}
+    	} catch (Exception e) {
+    		String alert = String.format("The price cannot small than or equal to 0.");
+            throw new IllegalArgumentException(alert);
+    	}
+    	for (Stock stck: market) {
+    		if (stck.isEqual(stock)) {
+            	stck.setSellPriceAmount(price);
+                return true;
+            }
+        }
+        return false;
+    }
+     
+    public String[][] getStockList() {
+    	String[][] data = new String[market.size()][3];
+        int count = 0;
+        for (Stock stock: market) {
+            String[] row = new String[3];
+            row[0] = Integer.toString(stock.getId());
+            row[1] = stock.getName();
+            row[2] = Integer.toString(0);
+            data[count++] = row;
+        }
+        return data;
+    }
+    
+    public String[][] showMarket() {
+    	String[][] data = new String[market.size()][5];
+        int count = 0;
+        for (Stock stock: market) {
+            String[] row = new String[5];
+            row[0] = Integer.toString(stock.getId());
+            row[1] = stock.getName();
+            row[2] = Integer.toString(stock.getAvailableNumber());
+            row[3] = Double.toString(stock.getBuyPrice().getAmount());
+            row[4] = Double.toString(stock.getSellPrice().getAmount());
+            data[count++] = row;
+        }
+        return data;
+    }
+    
     public Stock getStockById(int stockId) {
         for (Stock stock: market) {
             if (stockId == stock.getId()) {
