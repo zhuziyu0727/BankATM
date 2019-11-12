@@ -52,7 +52,7 @@ public class BankAccountSecurity extends BankAccount {
 		this.bindedSavingAccountNumber.setCode(BindedSavingAccountNumber);
 	}
 	// customer functions
-	public void buyStock(Stock stock, int amount) {
+	public void buyStock(Stock stock, int amount, int day, int month, int year) {
 		if(amount < 0) {
 			throw new NumberFormatException();
 		}
@@ -61,11 +61,12 @@ public class BankAccountSecurity extends BankAccount {
 		for(int i = 0; i < amount; i++) {
 			stockHolding.add(newStock);
 		}
+		addOneStockTransaction(day, month, year, stock.getId(), stock.getBuyPrice(), amount, "stockmarket", "");
 		Collections.sort(stockHolding, new StockComparator());
 	}
 	
-	public void sellStock(Stock stock, int number) {
-		if(getStockVolumeByStock(stock) < number) {
+	public void sellStock(Stock stock, int number, int day, int month, int year) {
+		if(getStockVolumeByStockId(stock.getId()) < number) {
 			throw new NumberFormatException();
 		}
 		while(number > 0) {
@@ -76,14 +77,15 @@ public class BankAccountSecurity extends BankAccount {
 				}
 			}
 		}
+		addOneStockTransaction(day, month, year, stock.getId(), stock.getSellPrice(), number, "Customer", "");
 		Collections.sort(stockHolding, new StockComparator());
 	}
 	
 	public double getAvgBoughtPriceByStock (Stock stock) {
-		if(getStockVolumeByStock(stock) == 0) {
+		if(getStockVolumeByStockId(stock.getId()) == 0) {
 			return 0;
 		}else {
-			return getStockAmountByStock(stock) / getStockVolumeByStock(stock);
+			return getStockAmountByStock(stock) / getStockVolumeByStockId(stock.getId());
 		}
 	}
 	
@@ -105,15 +107,29 @@ public class BankAccountSecurity extends BankAccount {
         setLastUpdateDate(day, month, year);
     };
     
+    public String[][] getMyStocks(String[][] stockList){
+    //String[] column = {"STOCKID", "STOCKNAME ", "MYSTOCKCOUNTS"};
+    	int n = stockList.length;
+    	if(stockList[0].length != 3) {
+    		return stockList;
+    	}else {
+    		for(int i = 0; i < n; i++) {
+    			int stockId = Integer.parseInt(stockList[i][0]);
+    			stockList[i][2] = Integer.toString(getStockVolumeByStockId(stockId));
+    		}
+    	}
+    	return stockList;
+    }
+    
 	// helper functions
 	public boolean isClosable() {
 		return stockHolding.size() == 0;
 	}
 	
-	public int getStockVolumeByStock(Stock stock) {
+	public int getStockVolumeByStockId(int stockid) {
 		int volume = 0;
 		for(Stock stockinHand : stockHolding) {
-			if(stockinHand.getId() == stock.getId())
+			if(stockinHand.getId() == stockid)
 				volume++;
 		}
 		return volume;

@@ -142,12 +142,16 @@ public class BankAccount implements BankAccountTypes {
     public void deductBalance(double value) {
         balance.deductAmount(value);
     }
-
+    
     // check functions
     protected void checkFromTo(String from, String to) {
         if (from.equals("") && to.equals(""))
             throw new IllegalArgumentException("\"From\" and \"To\" must not be both empty.");
         else if (!from.equals("") && !to.equals(""))
             throw new IllegalArgumentException("\"From\" and \"To\" must not be both not empty.");
+    }
+    
+    public boolean isdeductableBalance(double value) {
+    	return balance.isdeductableByAmount(value);
     }
 }
