@@ -29,7 +29,17 @@ public class Stock {
         this.totalNumber = defaultTotal;
         initialPrice(defaultTotal);
     }
-
+    //The fuction that show a stock
+    public String[] showStock() {
+    	String[] stock = new String[5];
+    	stock[0] = Integer.toString(this.getId());
+    	stock[1] = this.getName();
+    	stock[2] = Integer.toString(this.getAvailableNumber());
+    	stock[3] = Double.toString(this.getBuyPrice().getAmount());
+    	stock[4] = Double.toString(this.getSellPrice().getAmount());
+    	return stock;
+    }
+    
     // Functions used by the manager.
     public void setAvailableNumber(int availableNumber) {
         this.availableNumber = availableNumber;
