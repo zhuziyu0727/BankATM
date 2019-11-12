@@ -36,7 +36,11 @@ public class StockMarket {
         }
         return stockMarket;
     }
-
+    
+    //mutator function used by database
+    public void setMarket(ArrayList<Stock> newMarket) {
+    	this.market = newMarket;
+    }
     // Check if the new add stock is unique.
     public boolean checkUnique(Stock other) {
         for (Stock stock: market) {
