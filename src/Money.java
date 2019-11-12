@@ -59,7 +59,7 @@ public class Money implements CurrencyTypes {
     public void deductAmount(double value) {
         amount -= value;
     }
-
+   
     public void changeCurrencyType(String newCurrencyType) {
         String oldCurrencyType = getCurrencyType();
         CurrencyExchangeRate exchangeRate = CurrencyExchangeRate.getInstance();
@@ -92,5 +92,11 @@ public class Money implements CurrencyTypes {
         CurrencyExchangeRate exchangeRate = CurrencyExchangeRate.getInstance();
         double rate = exchangeRate.getRate(oldCurrencyType, newCurrencyType);
         return getAmount() * rate;
+    }
+    
+    public boolean isdeductableByAmount(double value) {
+        if(amount - value < 0) return false;
+        else return true;
+      
     }
 }

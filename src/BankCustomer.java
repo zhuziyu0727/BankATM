@@ -145,11 +145,20 @@ public class BankCustomer extends Member implements BankAccountTypes {
         return b.getTotalStockValue();
     }
     
+    public double getAvgBoughtPriceByStockIdByAccount(String accountNumber, String stockId) {
+    	BankAccountSecurity b = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+    	return b.getAvgBoughtPriceByStock(stockId);
+    }
     public String[][] getStockTransactionHistoryByAccountNumber(String accountNumber) {
         BankAccountSecurity bankAccount = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
         return bankAccount.getStockTransactionHistory();
     }
-
+    
+    public String[][] getMyStocksByAccountNumber(String accountNumber, String[][] stockList){
+    	BankAccountSecurity bankAccount = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
+    	return bankAccount.getMyStocks(stockList);
+    }
+    
     public boolean isSavinghasSecurityByAccountNumber(String accountNumber) {
         for (BankAccount b: accounts)
             if (b.getType() == "Security") {
@@ -163,6 +172,7 @@ public class BankCustomer extends Member implements BankAccountTypes {
 		BankAccountSecurity security = (BankAccountSecurity) getAccountByAccountNumber(accountNumber);
 		return security.isClosable();
 	}
+	
     // mutator function
     public void setCustomerNumber(String number) {
         checkCustomerNumber(number);
@@ -206,6 +216,26 @@ public class BankCustomer extends Member implements BankAccountTypes {
         accounts.add(bankAccount);
     }
 
+    public void openSecurityAccount(String accountNumber, String bindedSavingNumber,
+            double savingbalance, int day, int month, int year, double threshHold) {
+    	if (!checkEligibleAccountNumber(accountNumber))
+    		throw new IllegalArgumentException("account number is duplicate.");
+    	if (savingbalance < threshHold)
+    		throw new IllegalArgumentException("Saving balance is not enough to open an security account.");
+    	BankAccount bankAccountSecurity = new BankAccountSecurity(new BankNumberAccount(bindedSavingNumber));
+    	//doesn't charge fee
+    	bankAccountSecurity.open(day, month, year);
+    	bankAccountSecurity.setAccountNumber(accountNumber);
+		accounts.add(bankAccountSecurity);
+    }
+    
+    public void closeSecurityAccount(String accountNumber) {
+    	BankAccountSecurity b = (BankAccountSecurity)getAccountByAccountNumber(accountNumber);
+        if (!b.isClosable())
+            throw new IllegalArgumentException("There exist stocks in security account.");
+        accounts.remove(b);
+    }
+    
     public void depositToAccount(String accountNumber, double value, int day, int month, int year, double fee) {
         BankAccount b = getAccountByAccountNumber(accountNumber);
         double balance = b.getBalance();
